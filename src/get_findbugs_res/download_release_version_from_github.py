@@ -6,6 +6,7 @@ import src.tools.compare_file as cf
 import src.tools.web_operator as wo
 
 
+# 创建仓库
 def mkdir_findbugs_repos():
     pro_save_path = c.res_path+"projs/"
     cf.my_mkdir(pro_save_path)

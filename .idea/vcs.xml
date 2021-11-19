@@ -2,5 +2,10 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/projs/archiva/classes_repos/tmp" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/projs/archiva/unzip_repos" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/projs/archiva/unzip_repos/archiva" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/projs/archiva/unzip_repos/archiva-2.2.5" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/projs/archiva/unzip_reposarchiva-2.2.5" vcs="Git" />
   </component>
 </project>

@@ -8,8 +8,8 @@ max_jira = 2021
 # jira项目路径
 base_url = 'https://issues.apache.org/jira/browse/MRM-'
 # 本地项目路径
-path = '/Users/mayang/PycharmProjects/projs/archiva'
+path = 'E:/projects/git/java/archiva'
 # 输出文件保存路径
 
-res_path = os.popen('pwd').readline().split('src')[0].replace('\n','/')
-print(res_path)
+res_path = 'E:/projects/py/shiwanhuoji/Fx_is_pig/'
+# res_path = 'F:/tmp'
