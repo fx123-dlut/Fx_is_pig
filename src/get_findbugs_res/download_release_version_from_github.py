@@ -1,5 +1,5 @@
 import os.path
-
+from time import sleep
 import configure as c
 import src.tools.write_to_xls as wtx
 import src.tools.compare_file as cf
@@ -26,10 +26,11 @@ def download_zip_from_github(zip_path):
         if os.path.exists(zip_path+i[0]+'.zip'):
             print("existed : "+i[0]+'.zip')
             continue
-        print(zip_path+i[0]+'.zip')
         url = 'https://github.com/apache/'+c.pro_name+'/archive/refs/tags/'+i[0]+'.zip'
-        wo.download_zip_from_url(url,zip_path)
-        # print(url)
+        print("waiting for download url : "+url)
+        wo.get_zip_from_url(url,zip_path)
+        # sleep(5)
+        print(url)
     return True
 
 
@@ -39,11 +40,11 @@ def unzip_files(zip_path):
 
 
 # 从github下载到解压
-def download_zip_from_github_main():
+def download_and_unzip_from_github_main():
     zip_path = mkdir_findbugs_repos()
     download_zip_from_github(zip_path)
     unzip_files(zip_path)
 
 
 if __name__ == "__main__":
-    print(download_zip_from_github_main())
+    print(download_and_unzip_from_github_main())

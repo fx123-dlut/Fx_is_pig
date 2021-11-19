@@ -2,7 +2,7 @@ import os
 import src.tools.write_to_xls as wtx
 import configure as c
 
-release_file = 'git_release_version_with_commitid'
+release_file = 'git_release_version_with_committime'
 
 
 def get_all_tag_name(path):
@@ -20,26 +20,33 @@ def get_all_tag_name(path):
 
 def get_all_tag_with_commitid(path):
     res = []
-    headers = ['release version','commit time']
+    headers = ['release version','commit id','commit time']
 
     tags = get_all_tag_name(path)
     for i in tags:
         cmd = 'cd '+path + " && git show "+i
         run_res = os.popen(cmd).readlines()
+        comid = ''
+        date = ''
         for line in run_res:
+            if line[:7] == 'commit ':
+                comid = line.split('commit ')[1].replace('\n','').strip()
             if line[:6] == 'Date: ':
-                res.append([i,line.split('Date: ')[1].replace('\n','').strip()])
+                date = line.split('Date: ')[1].replace('\n','').strip()
+            if comid != '' and date != '':
+                res.append([i,comid,date])
                 break
+
     res.reverse()
     print(res)
     wtx.save_to_init_xls(headers,res,c.pro_name,release_file)
 
 
-def get_release_all_info():
+def get_release_all_info(re_write = 0):
     res = []
     release_file_path = c.res_path+"init_data/"+release_file+'.xls'
     all_commit_path = c.res_path+"init_data/git_log_info.xls"
-    if not os.path.exists(release_file_path):
+    if not os.path.exists(release_file_path) or re_write == 1:
         get_all_tag_with_commitid(c.path)
     all_release_commit_id = wtx.get_from_xls(release_file_path)
     # print(all_release_commit_id)
@@ -56,4 +63,4 @@ def get_release_all_info():
 
 
 if __name__ == "__main__":
-    get_release_all_info()
+    get_release_all_info(1)

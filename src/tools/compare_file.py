@@ -124,13 +124,17 @@ def my_mkdir(path):
 
 
 def unzip_all_zip_indict(path,res_path,file_type):
-    print(path)
     files = os.listdir(path)
     for i in files:
+        if i.find('zip') < 0:
+            continue
+        print("unzip file : "+path+i)
         zip_ref = zipfile.ZipFile(path+i)
         zip_ref.extractall(res_path+i.split('.'+file_type)[0])
         zip_ref.close()
 
 
 if __name__=="__main__":
-    my_mkdir('/Users/mayang/PycharmProjects/FindbugsSuanfa/projs/archiva')
+    if '/Users/mayang/PycharmProjects/FindbugsSuanfa/projs/archiva/zip_repos/.DS_Store'.find('.zip')<0:
+        print('true')
+    # my_mkdir('/Users/mayang/PycharmProjects/FindbugsSuanfa/projs/archiva')
