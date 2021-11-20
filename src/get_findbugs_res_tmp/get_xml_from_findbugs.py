@@ -35,6 +35,21 @@ def get_only_wenjianjia():
     return files
 
 
+def get_xml(classes_path,now_path):
+    # 修改当前路径
+    os.chdir(classes_path)
+    # 获取文件夹下所有子文件夹
+    pro_names = os.listdir('.')
+    n = 0
+    for i in pro_names:
+        cmdline = 'findbugs.bat -textui -progress -high -xml -output '\
+                  +now_path+'/datas/xml_res/res'+str(n)+'.xml '\
+                  +classes_path+'/'+i
+        print(cmdline)
+        os.system(cmdline)
+        n = n + 1
+        
+
 def main_step():
     # 项目名称
     proname = 'commons-vfs'
@@ -43,8 +58,6 @@ def main_step():
     now_path = os.getcwd().split('get_fixed')[0]
     pro_path = now_path.split('compare\\')[0]
     classes_path = now_path+'datas/classes_file/'+proname
-    # # 获取所有classes文件夹
-    get_xml_from_findbugs(ppath,proname,classes_path,pro_path)
     print(now_path)
     # 根据文件夹获取xml文件
     get_xml(classes_path,now_path)
