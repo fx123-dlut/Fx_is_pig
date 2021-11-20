@@ -6,6 +6,7 @@ import src.tools.compare_file as cf
 import src.tools.get_commit_id as gci
 import src.data_process.get_generic_bug_line as ggbl
 import os
+import src.get_findbugs_res.get_findbug_res_main as gfrm
 
 
 # ******主流程函数******
@@ -83,5 +84,7 @@ def main_func():
     # 验证结果
     cf.verify_res_file(add_del_lines_path,0,only_bug_version_path,0)
 
+
 if __name__ == "__main__":
     main_func()
+    gfrm.get_findbugs_res_main()
