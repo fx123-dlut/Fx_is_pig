@@ -1,6 +1,7 @@
 import requests
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+from urllib3.util.retry import Retry
+from time import sleep
 
 
 # 从.zip的url中下载zip文件
@@ -17,10 +18,16 @@ def get_zip_from_url(url,down_path):
     adapter = HTTPAdapter(max_retries=retry)
     s.mount('https://', adapter)
     s.keep_alive = False
-    response = s.get(url)
-    data = response.content
-    with open(down_path+url.split('/')[-1],'wb') as f:
-        f.write(data)
+    try:
+        response = s.get(url,timeout=5)
+        data = response.content
+        with open(down_path + url.split('/')[-1], 'wb') as f:
+            f.write(data)
+    except Exception:
+        s.close()
+        print("wait 10 second and try again : "+url)
+        sleep(10)
+        get_zip_from_url(url,down_path)
     s.close()
 
 

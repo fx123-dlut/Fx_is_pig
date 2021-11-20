@@ -10,18 +10,24 @@ def copy_classes_to_targetpath():
     if not os.path.exists(classpath):
         os.mkdir(classpath)
     unzip_path = respath+'unzip_repos/'
-    classes_folders = get_all_directory(unzip_path,[],'src')
+    print('waiting for collecting classes......')
+    classes_folders = get_all_directory(unzip_path,[],'classes')
     for i in classes_folders:
-        tar_folder = i.split('unzip_repos')[1].split('src')[0]
-        print(tar_folder)
-        if not os.path.exists(classpath+tar_folder):
-            now_path = classpath
-            for i in tar_folder.split('/')[1:]:
-                now_path = now_path+'/'+i
-                if not os.path.exists(now_path):
-                    os.mkdir(now_path)
-        # cp -r folder1 folder2 将folder1复制到folder2中
-        os.system('cp -r ' + i + " " + classpath+tar_folder)
+        file_name = i.split('unzip_repos')[1].replace('\\','/')
+        cmdline = 'xcopy "' + i + '/*.*" "' + classpath + file_name + '/" /s /f /h'
+        print(cmdline)
+        os.system(cmdline)
+        # # mac下用
+        # tar_folder = i.split('unzip_repos')[1].split('src')[0].replace('\\','/')
+        # print(tar_folder)
+        # if not os.path.exists(classpath+tar_folder):
+        #     now_path = classpath
+        #     for i in tar_folder.split('/')[1:]:
+        #         now_path = now_path+'/'+i
+        #         if not os.path.exists(now_path):
+        #             os.mkdir(now_path)
+        # # cp -r folder1 folder2 将folder1复制到folder2中
+        # os.system('cp -r ' + i + " " + classpath+tar_folder)
 
 
 # 获取多层目录下所有名字的文件夹
@@ -60,12 +66,15 @@ def copy_one_version_to_target_path(folder_name = 'tmp'):
         os.mkdir(tarpath)
     if os.path.exists(tarpath+folder_name):
         shutil.rmtree(tarpath+folder_name)
-    classes_folders = get_all_directory(c.path,[],'classes')
-    print("classes file is : " + str(classes_folders))
-    # 复制文件到指定文件夹下
+    print("classes file is : " + tarpath+folder_name)
+    # 复制文件到指定文件夹下 http://www.xue51.com/tuwen/xcopy4444.html windows适用
     cmdline = 'xcopy "' + c.path + '/*.*" "' +tarpath+folder_name + '/" /s /f /h'
+    cmdline2 = 'xcopy "' + c.path + '/src" "' +tarpath+folder_name + '/src/" /s /f /h'
+    cmdline3 = 'xcopy "' + c.path + '/target" "' +tarpath+folder_name + '/target/" /s /f /h'
     print(cmdline)
     os.system(cmdline)
+    os.system(cmdline2)
+    os.system(cmdline3)
     # 不好用
     # shutil.copytree(c.path.replace('\\','/'),(tarpath+folder_name).replace('\\','/'))
 
@@ -102,5 +111,6 @@ if __name__ == "__main__":
     # get_only_directory('/Users/mayang/PycharmProjects/FindbugsSuanfa/projs/archiva/unzip_repos/archiva-1.0/archiva-archiva-1.0')
     # copy_classes_to_targetpath('/Users/mayang/PycharmProjects/FindbugsSuanfa/projs/archiva/unzip_repos')
     # print(get_all_directory('/Users/mayang/PycharmProjects/FindbugsSuanfa/projs/archiva/unzip_repos',[],'src'))
-    copy_one_version_classes_to_target_path('archiva')
-    # shutil.copytree(c.path.replace('\\','/'),'E:\\projects\\py\\shiwanhuoji\\Fx_is_pig\\projs\\archiva\\unzip_repos/archiva'.replace('\\','/'))
+    # copy_one_version_classes_to_target_path('archiva')
+    copy_one_version_to_target_path()
+    # shutil.copytree(c.path.replace('\\','/'),'E:\\projects\\py\\shiwanhuoji\\Fx_is_pig\\projs\\archiva\\classes_repos/archiva'.replace('\\','/'))

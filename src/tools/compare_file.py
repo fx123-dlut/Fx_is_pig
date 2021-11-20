@@ -128,10 +128,13 @@ def unzip_all_zip_indict(path,res_path,file_type):
     for i in files:
         if i.find('zip') < 0:
             continue
+        cmdline = 'unzip -o '+ path+ i + ' -d '+res_path
         print("unzip file : "+path+i)
-        zip_ref = zipfile.ZipFile(path+i)
-        zip_ref.extractall(res_path+i.split('.'+file_type)[0])
-        zip_ref.close()
+        print(cmdline)
+        os.system(cmdline)
+        # zip_ref = zipfile.ZipFile(path+i)
+        # zip_ref.extractall(res_path+i.split('.'+file_type)[0])
+        # zip_ref.close()
 
 
 if __name__=="__main__":

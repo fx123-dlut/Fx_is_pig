@@ -12,4 +12,4 @@ path = 'E:/projects/git/java/archiva'
 # 输出文件保存路径
 
 res_path = 'E:/projects/py/shiwanhuoji/Fx_is_pig/'
-# res_path = 'F:/tmp'
+# res_path = 'F:/tmp/'
