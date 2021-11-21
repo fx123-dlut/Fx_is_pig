@@ -42,6 +42,19 @@ def get_all_directory(path,all_file_full_path_list,target_folder):
     return all_file_full_path_list
 
 
+# 获取文件夹下多层目录所有的文件名
+def get_all_file(path,all_file_full_path_list,target_file):
+    all_file_list = os.listdir(path)
+    for file in all_file_list:
+        file_path = os.path.join(path,file)
+        if os.path.isdir(file_path):
+            get_all_file(file_path,all_file_full_path_list,target_file)
+        elif os.path.isfile(file_path) and \
+                file_path[-len(target_file+'1'):].find(target_file) > 0:
+            all_file_full_path_list.append(file_path.replace('\\','/'))
+    return all_file_full_path_list
+
+
 # 只获取文件夹名字
 def get_only_directory(path):
     files = os.listdir(path)
@@ -142,5 +155,9 @@ if __name__ == "__main__":
     # copy_classes_to_targetpath('/Users/mayang/PycharmProjects/FindbugsSuanfa/projs/archiva/unzip_repos')
     # print(get_all_directory('/Users/mayang/PycharmProjects/FindbugsSuanfa/projs/archiva/unzip_repos',[],'src'))
     # copy_one_version_classes_to_target_path('archiva')
-    copy_one_version_to_target_path()
+    # copy_one_version_to_target_path()
     # shutil.copytree(c.path.replace('\\','/'),'E:\\projects\\py\\shiwanhuoji\\Fx_is_pig\\projs\\archiva\\classes_repos/archiva'.replace('\\','/'))
+    res = []
+    get_all_file('E:\\projects\\py\\shiwanhuoji\\Fx_is_pig\\projs\\archiva\\unzip_repos\\archiva-archiva-1.0',res,'java')
+    for i in res:
+        print(i)

@@ -13,8 +13,7 @@ def get_findbugs_xml():
     version_list = os.listdir(classes_folder)
     for i in version_list:
         now_rel_path = classes_folder+i
-        # findbugs.bat -textui -progress -high -xml -output E:/projects/py/shiwanhuoji/Fx_is_pig//projs/archiva/findbugs_res
-        # /xml/archiva-2.2.5.xml E:/projects/py/shiwanhuoji/Fx_is_pig//projs/archiva/unzip_repos/archiva-2.2.5/archiva-2.2.5
+        # findbugs.bat -textui -progress -high -xml -output E:/projects/py/shiwanhuoji/Fx_is_pig//projs/archiva/findbugs_res/xml/archiva-2.2.5.xml E:/projects/py/shiwanhuoji/Fx_is_pig//projs/archiva/classes_repos/archiva-archiva-2.2.5
         cmdline = 'findbugs.bat -textui -progress -high -xml -output '\
                   +res_path+i+'.xml '\
                   +now_rel_path

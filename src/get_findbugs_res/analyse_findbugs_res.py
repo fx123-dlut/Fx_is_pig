@@ -3,6 +3,7 @@ import os
 import xml.dom.minidom as dom
 import src.tools.write_to_xls as wtx
 import src.tools.file_operator as fo
+import src.get_findbugs_res.get_codes_by_findbugs_res as gcbfr
 
 
 def get_xls_by_true_filename(xml_path,file_name,res_path):
@@ -83,16 +84,23 @@ def compare_xls_inorder(files):
 
 def compare_xls():
     xls_path = c.res_path+ '/projs/' + c.pro_name+'/findbugs_res/xls'
+    unzip_files = c.res_path + '/projs/' + c.pro_name + '/unzip_repos/'
     # 根据版本号进行排序
-    files = os.listdir(xls_path)
-    if not fo.file_equal_len(files):
-        files = fo.sort_files_by_version(files)
+    unzip_files = os.listdir(unzip_files)
+    files = []
+    for i in unzip_files:
+        files.append(i+'.xls')
     compare_xls_inorder(files)
 
 
 def analyse_findbugs_res_main_func():
     # 从xml中提取信息到xls
     # auto_get_xls()
+
+    # 获取findbugs中对应的缺陷代码行
+    gcbfr.get_codes_from_unzip_repos()
+
+    # 比较结果
     compare_xls()
 
 
