@@ -99,6 +99,36 @@ def copy_one_version_classes_to_target_path(folder_name = 'tmp'):
     # shutil.copytree(c.path.replace('\\','/'),(tarpath+folder_name).replace('\\','/'))
 
 
+# 对文件的版本号进行排序
+def sort_files_by_version(files):
+    res = []
+    files.sort(key = lambda x: len(x))
+    head_files = get_target_lens_file_num(files,len(files[0]))
+    index = len(head_files)
+    for i in head_files:
+        res.append(i)
+        while files[index].split('xls')[0].find(i.split('xls')[0]) >= 0:
+            res.append(files[index])
+            index = index + 1
+    return res
+
+
+# 获取指定长度的文件数量
+def get_target_lens_file_num(files,lens):
+    res = []
+    for i in files:
+        if len(i) == lens:
+            res.append(i)
+    return res
+
+
+# 判断文件夹下所有文件是否有着相同长度的版本信息
+def file_equal_len(files):
+    for i in range(len(files)-1):
+        if len(files[i].split('.')) != len(files[i+1].split('.')):
+            return False
+    return True
+
 
 def copy_all_version_to_target_path(version_list):
     for i in version_list:

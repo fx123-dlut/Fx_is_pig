@@ -23,6 +23,29 @@ def save_to_xls(headers,res,pro_name,res_file):
         row = row + 1
     xls.save(c.res_path+'res/'+res_file+".xls")
 
+
+# 将list保存到xls文件中
+def save_to_targetpath_xls(headers,res,pro_name,res_file,path):
+    row = 0
+    line = 0
+    xls = xlwt.Workbook()
+    sht1 = xls.add_sheet(pro_name)
+    for i in headers:
+        sht1.write(row,line,i)
+        line = line + 1
+    row = row + 1
+    line = 0
+    for i in res:
+        # print(row)
+        for j in i:
+            # print(j)
+            sht1.write(row,line,j)
+            line = line + 1
+        line = 0
+        row = row + 1
+    xls.save(path+'/'+res_file+".xls")
+
+
 def save_to_init_xls(headers,res,pro_name,res_file):
     row = 0
     line = 0
