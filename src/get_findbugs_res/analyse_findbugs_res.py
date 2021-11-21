@@ -98,7 +98,7 @@ def analyse_findbugs_res_main_func():
     # auto_get_xls()
 
     # 获取findbugs中对应的缺陷代码行
-    gcbfr.get_codes_from_unzip_repos()
+    # gcbfr.get_codes_from_unzip_repos()
 
     # 比较结果
     compare_xls()
