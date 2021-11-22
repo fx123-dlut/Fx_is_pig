@@ -51,21 +51,21 @@ def fix_lost_codes(code_list,nlfile,commit_v,path):
             print(checkout)
             ct.run_command(checkout)
             sleep(10)
-        if(this_file != i[2]):
-            this_file = i[2]
+        if(this_file != i[1]):
+            this_file = i[1]
             blame_command = 'git blame -s -f '+this_file
             print(blame_command)
             blame_res = ct.run_command(blame_command)
         for j in blame_res:
             print(j)
             # print(j.split(') ',maxsplit=1)[-1].strip()+" ********* "+i[3])
-            if(j.split(') ',maxsplit=1)[-1].strip() == i[3]):
-                print(i[3])
+            if(j.split(') ',maxsplit=1)[-1].strip() == i[2]):
+                print(i[2])
                 linen = j.split(') ',maxsplit=1)[0]
                 # print(j)
                 linen = linen.split(' ')[-1]
                 sv = j.split(" ")[0][0:8]
-                ret.append([i[2],linen,i[3],sv,commit_v.get(sv),
+                ret.append([i[1],linen,i[2],sv,commit_v.get(sv),
                             now_last_list.get(this_cid),commit_v.get(now_last_list.get(this_cid)),this_cid,commit_v.get(this_cid[0:8])])
                 break
     print(ret)
@@ -110,7 +110,7 @@ def compare_res_and_show(file2,file1):
     for i in data2:
         flag = True
         for j in data1:
-            if(i[0] == j[7] and i[3] == j[2] and i[2] == j[0]):
+            if(i[0] == j[7] and i[2] == j[2] and i[2] == j[0]):
                 flag = False
                 break
         if(flag):

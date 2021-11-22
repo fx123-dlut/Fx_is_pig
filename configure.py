@@ -7,6 +7,8 @@ jira_name = 'MRM'
 max_jira = 2021
 # jira项目路径
 base_url = 'https://issues.apache.org/jira/browse/MRM-'
+# base_url = 'https://issues.apache.org/jira/browse/TIKA-'
+
 # 本地项目路径
 path = 'E:/projects/git/java/archiva'
 # 输出文件保存路径

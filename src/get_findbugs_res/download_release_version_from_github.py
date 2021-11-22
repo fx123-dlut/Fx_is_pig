@@ -21,7 +21,7 @@ def mkdir_findbugs_repos():
 
 # 从github下载zip文件
 def download_zip_from_github(zip_path):
-    release_file_name = c.res_path+"init_data/git_release_version_with_committime.xls"
+    release_file_name = c.res_path+"init_data/git_release_version_with_commitid.xls"
     release_file_data = wtx.get_from_xls(release_file_name)
     for i in release_file_data:
         if os.path.exists(zip_path+i[0]+'.zip'):

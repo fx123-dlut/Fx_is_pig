@@ -10,6 +10,8 @@ pro_name = c.pro_name
 
 def get_data(path):
     ct.change_path_to_target(path)
+    print('waiting for git pull')
+    ct.run_command('git pull')
     cmd_res = ct.run_command('git log --stat --before=\'2021.06.30\'')
     # cmd_res = ct.run_command('git log --stat')
     res = []

@@ -2,7 +2,7 @@ import os
 import src.tools.write_to_xls as wtx
 import configure as c
 
-release_file = 'git_release_version_with_committime'
+release_file = 'git_release_version_with_commitid'
 
 
 def get_all_tag_name(path):

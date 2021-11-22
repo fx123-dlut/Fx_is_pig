@@ -37,9 +37,9 @@ def get_xls_by_true_filename(xml_path,file_name,res_path):
 def auto_get_xls():
     pro_path = c.res_path
     folder_path = pro_path+'/projs/'+c.pro_name+'/findbugs_res/'
-    xls_path = folder_path+'xls'
+    xls_path = folder_path+'xls/'
     print(xls_path)
-    if not os.path.exists(xls_path) == False:
+    if not os.path.exists(xls_path):
         os.mkdir(xls_path)
     file_name = os.listdir(folder_path+'xml')
     get_xls_by_true_filename(folder_path+'xml/',file_name,xls_path)
@@ -95,10 +95,10 @@ def compare_xls():
 
 def analyse_findbugs_res_main_func():
     # 从xml中提取信息到xls
-    # auto_get_xls()
+    auto_get_xls()
 
     # 获取findbugs中对应的缺陷代码行
-    # gcbfr.get_codes_from_unzip_repos()
+    gcbfr.get_codes_from_unzip_repos()
 
     # 比较结果
     compare_xls()

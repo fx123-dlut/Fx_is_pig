@@ -1,6 +1,7 @@
 import src.tools.write_to_xls as wtx
 import src.tools.time_operator as to
 import configure as c
+import src.collect_datas.from_git_get_releaseversion as fggr
 
 
 # 给所有的bug line信息中增加commit id和一些其他的信息
@@ -36,6 +37,10 @@ def split_bug_to_release_by_time():
         res.append(i+release_info[index-1])
     wtx.save_to_xls(headers,res,c.pro_name,"2_3_2_bugs_split_by_release")
     return res
+
+def split_by_release_main_func():
+    fggr.get_release_all_info()
+    split_bug_to_release_by_time()
 
 
 if __name__ == "__main__":

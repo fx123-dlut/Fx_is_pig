@@ -5,12 +5,13 @@ from random import choice
 import src.tools.write_to_xls as wtx
 import configure as c
 from time import sleep
+import src.tools.list_operator as lo
 
 
 pro_name = c.pro_name
 max = c.max_jira
 base_url = c.base_url
-res_name = c.pro_name+'_issue_info'
+res_name = 'jira_issue_info'
 max_conn = 10
 headers=[
 "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36 SE 2.X MetaSr 1.0",
@@ -20,13 +21,14 @@ file_headers = ['title','type','status','priority','resolution','affect version'
 
 project_init_data_path = c.res_path+'init_data/'
 
-def get_info(res):
-    for i in range(len(res),max):
+def get_info(res,start= 0):
+    for i in range(start,max):
+        # print(str(i) + str(len(res)))
         try:
             this_url = base_url+str(i+1)
             header = {"User-Agent":choice(headers)}
             print(str(i)+"/"+str(max)+" "+this_url)
-            req = requests.get(this_url,headers=header,timeout = 7)
+            req = requests.get(this_url,headers=header,timeout = 2)
             web = req.text
             etree = html.etree
             root = etree.HTML(web)
@@ -53,15 +55,19 @@ def get_info(res):
             this_res.append(resolution)
             this_res.append(affect_v)
             this_res.append(fix_v)
-
+            if lo.judge_in_list(res,this_res):
+                print('already existed')
+                continue
             res.append(this_res)
             print(this_res)
             # print(res)
         except Exception:
-            print('connection wrong ,waiting 5 seconds and try again...')
-            sleep(5)
-            get_info(res)
+            print('connection wrong ,waiting 1 seconds and try again...')
+            # sleep(5)
+            get_info(res,len(res))
+            break
     return res
+
 
 def get_only_bug_version(info):
     res = []
