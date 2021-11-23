@@ -21,6 +21,15 @@ file_headers = ['title','type','status','priority','resolution','affect version'
 
 project_init_data_path = c.res_path+'init_data/'
 
+
+def get_value_from_web(root,re_expression):
+    value = root.xpath(re_expression)
+    if(value == []):
+        return ['']
+    else:
+        return value[-1].strip()
+
+
 def get_info(res,start= 0):
     for i in range(start,max):
         # print(str(i) + str(len(res)))
@@ -38,12 +47,12 @@ def get_info(res,start= 0):
             title1 = root.xpath('//title/text()')[-1].strip()
             if(title1[0:6]=='Log in'):
                 continue
-            type = root.xpath('//span[@id="type-val"]/text()')[-1].strip()
-            status = root.xpath('//span[@id="status-val"]/span/text()')[-1].strip()
-            priority = root.xpath('//span[@id="priority-val"]/text()')[-1].strip()
-            resolution = root.xpath('//span[@id="resolution-val"]/text()')[-1].strip()
-            affect_v = root.xpath('//span[@id="versions-val"]/text()')[-1].strip()
-            fix_v = root.xpath('//span[@id="fixfor-val"]/text()')[-1].strip()
+            type = get_value_from_web(root,'//span[@id="type-val"]/text()')
+            status = get_value_from_web(root,'//span[@id="status-val"]/span/text()')
+            priority = get_value_from_web(root,'//span[@id="priority-val"]/text()')
+            resolution = get_value_from_web(root,'//span[@id="resolution-val"]/text()')
+            affect_v = get_value_from_web(root, '//span[@id="versions-val"]/text()')
+            fix_v = get_value_from_web(root,'//span[@id="fixfor-val"]/text()')
             if(affect_v == ''):
                 affect_v = root.xpath('//span[@id="versions-val"]/span/span/text()')[-1].strip()
             if(fix_v == ''):
@@ -63,6 +72,7 @@ def get_info(res,start= 0):
             # print(res)
         except Exception:
             print('connection wrong ,waiting 1 seconds and try again...')
+            print(Exception.__name__)
             # sleep(5)
             get_info(res,len(res))
             break
@@ -75,6 +85,7 @@ def get_only_bug_version(info):
         if i[1] == 'Bug' and (i[2] == 'Closed' or i[2] == 'Resolved'):
             res.append(i)
     wtx.save_to_init_xls(file_headers,res,'only_bug',res_name+'_only_bug_version')
+
 
 def get_jira_info():
     res = []
