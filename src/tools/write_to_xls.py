@@ -21,7 +21,7 @@ def save_to_xls(headers,res,pro_name,res_file):
             line = line + 1
         line = 0
         row = row + 1
-    xls.save(c.res_path+'res/'+res_file+".xls")
+    xls.save(c.res_path+'/res/'+res_file+".xls")
 
 
 # 将list保存到xls文件中
@@ -64,7 +64,7 @@ def save_to_init_xls(headers,res,pro_name,res_file):
             line = line + 1
         line = 0
         row = row + 1
-    xls.save(c.res_path+'init_data/'+res_file+".xls")
+    xls.save(c.res_path+'/init_data/'+res_file+".xls")
 
 def get_from_xls(path,start_line= 1):
     wb = xlrd.open_workbook(path)

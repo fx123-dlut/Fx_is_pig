@@ -6,12 +6,12 @@ release_file = 'git_release_version_with_commitid'
 
 
 def get_all_tag_name(path):
-    cmd = 'cd ' + path + ' && git tag'
+    cmd = 'cd ' + path + '  && git tag'
     print(cmd)
     run_res = os.popen(cmd).readlines()
     tags = []
     for i in run_res:
-        if i.find('alpha') > 0 or i.find('beta') > 0 or len(i.split('-')) > 2 or i.find(c.pro_name+'-') < 0 or len(i.split('.')) == 1:
+        if i.find('alpha') > 0 or i.find('beta') > 0 or i.find(c.pro_name+'-') < 0 or len(i.split('.')) == 1:
             continue
         tags.append(i.replace('\n',''))
     # print(tags)
@@ -42,7 +42,7 @@ def get_all_tag_with_commitid(path):
     wtx.save_to_init_xls(headers,res,c.pro_name,release_file)
 
 
-def get_release_all_info(re_write = 0):
+def get_release_all_info(re_write = 1):
     res = []
     release_file_path = c.res_path+"init_data/"+release_file+'.xls'
     all_commit_path = c.res_path+"init_data/git_log_info.xls"

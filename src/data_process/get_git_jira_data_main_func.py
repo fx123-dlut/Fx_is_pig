@@ -12,22 +12,22 @@ import os
 def main_func():
     path = c.path
     res_file_path = c.res_path
-    commit_id_file = res_file_path+'res/combine.xls'
+    commit_id_file = res_file_path+'/res/combine.xls'
     only_bug_version_name = '1_get_only_bug_version'
-    only_bug_version_path = res_file_path+'res/'+only_bug_version_name+'.xls'
+    only_bug_version_path = res_file_path+'/res/'+only_bug_version_name+'.xls'
     no_anno_file_name = '1_1_no_anno_file'
-    no_anno_file_path = res_file_path+'res/'+no_anno_file_name+'.xls'
+    no_anno_file_path = res_file_path+'/res/'+no_anno_file_name+'.xls'
     combine_1gobv_1naf_name = '1_2_final_res'
-    combine_1gobv_1naf_path = res_file_path+'res/'+combine_1gobv_1naf_name+'.xls'
+    combine_1gobv_1naf_path = res_file_path+'/res/'+combine_1gobv_1naf_name+'.xls'
 
     add_del_lines_file = '2_1_add_del_lines_NoAnno_and_less4'
-    add_del_lines_path = res_file_path+"res/"+add_del_lines_file+'.xls'
+    add_del_lines_path = res_file_path+"/res/"+add_del_lines_file+'.xls'
     generic_bug_line_file = '2_2_generic_bug_lines_with_now_version'
-    generic_bug_line_path = res_file_path+"res/"+generic_bug_line_file+'.xls'
+    generic_bug_line_path = res_file_path+"/res/"+generic_bug_line_file+'.xls'
     every_line_file_name = '2_3_from_show_every_lines'
-    every_line_file_path = res_file_path+'res/'+every_line_file_name+'.xls'
+    every_line_file_path = res_file_path+'/res/'+every_line_file_name+'.xls'
     now_last_file_name = '2_4_now_last'
-    now_last_file_path = res_file_path+'res/'+now_last_file_name+'.xls'
+    now_last_file_path = res_file_path+'/res/'+now_last_file_name+'.xls'
 
     # 获取初始数据
     gdm.get_data()
@@ -74,12 +74,14 @@ def main_func():
     # commit_dict_withoutNone = gci.get_commit_id(commit_id_file,8,False)
     commit_dict_withoutNone = gci.get_commit_id(commit_id_file,8)
     print(commit_dict_withoutNone)
+    #####################################################################
+    # 讲代码分开分成表格中的一行对应一个带吗行
+    ggbl.split_show_to_every_lines(add_del_lines_file,every_line_file_name)
     # #####################################################################
     # 获取遗漏的行
     commit_dict = gci.get_commit_id(commit_id_file,8,True)
-    ggbl.split_show_to_every_lines(add_del_lines_file,every_line_file_name)
-    cf.fix_lost_code_main(every_line_file_path,3,generic_bug_line_path,2,now_last_file_path,commit_dict,path)
+    # cf.fix_lost_code_main(every_line_file_path,3,generic_bug_line_path,2,now_last_file_path,commit_dict,path)
     ###################################################################
     # 验证结果
-    cf.verify_res_file(add_del_lines_path,0,only_bug_version_path,0)
+    # cf.verify_res_file(add_del_lines_path,0,only_bug_version_path,0)
 

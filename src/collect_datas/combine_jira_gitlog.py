@@ -3,7 +3,7 @@ import configure as c
 import re
 
 pro_name = c.jira_name
-project_init_data_path = c.res_path+"init_data/"
+project_init_data_path = c.res_path+"/init_data/"
 
 def combine_gitlog_jira(filepath1,filepath2):
     filedata = wtx.get_from_xls(filepath1,0)
@@ -51,9 +51,9 @@ def get_bug_version_dict(file_path):
     return res_dict,data[0]
 
 def combine_git_jira():
-    filename1 = 'git_log_info'
+    filename1 = '/git_log_info'
     filepath1 = project_init_data_path+filename1+'.xls'
-    filename2 = 'jira_issue_info_only_bug_version'
+    filename2 = '/jira_issue_info_only_bug_version'
     filepath2 = project_init_data_path+filename2+'.xls'
     combine_gitlog_jira(filepath1,filepath2)
     combine_gitlog_jira_once(filepath1,filepath2)
