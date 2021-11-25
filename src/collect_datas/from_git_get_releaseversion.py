@@ -1,31 +1,34 @@
 import os
 import src.tools.write_to_xls as wtx
+import src.tools.cmd_tool as ct
 import configure as c
 
 release_file = 'git_release_version_with_commitid'
 
 
-def get_all_tag_name(path):
-    cmd = 'cd ' + path + '  && git tag'
-    print(cmd)
+def get_all_tag_name(path,filter = 0):
+    os.chdir(path)
+    cmd = 'git tag'
     run_res = os.popen(cmd).readlines()
     tags = []
     for i in run_res:
-        if i.find('alpha') > 0 or i.find('beta') > 0 or i.find(c.pro_name+'-') < 0 or len(i.split('.')) == 1:
+        if  filter == 1 and (i.find('alpha') > 0 or i.find('beta') > 0 or i.find(c.pro_name+'-') < 0 or len(i.split('.')) == 1) :
             continue
+        print(i)
         tags.append(i.replace('\n',''))
-    # print(tags)
+    print('all tags is :')
+    print(tags)
     return tags
 
 
 def get_all_tag_with_commitid(path):
     res = []
     headers = ['release version','commit id','commit time']
-
     tags = get_all_tag_name(path)
     for i in tags:
         cmd = 'cd '+path + " && git show "+i
-        run_res = os.popen(cmd).readlines()
+        print(cmd)
+        run_res = ct.run_command(cmd)
         comid = ''
         date = ''
         for line in run_res:
