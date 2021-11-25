@@ -126,9 +126,12 @@ def my_mkdir(path):
 def unzip_all_zip_indict(path,res_path,file_type):
     files = os.listdir(path)
     for i in files:
+        this_res_name = res_path+'/'+i.split('.zip')[0]
         if i.find('zip') < 0:
             continue
-        cmdline = 'unzip -o '+ path+ i + ' -d '+res_path
+        if not os.path.exists(this_res_name):
+            os.mkdir(this_res_name)
+        cmdline = 'unzip -o '+ path+ i + ' -d '+ this_res_name
         print("unzip file : "+path+i)
         print(cmdline)
         os.system(cmdline)

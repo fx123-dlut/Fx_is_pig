@@ -46,7 +46,8 @@ def mvn_unzip_release():
     rel_list = os.listdir(unzip_filepath)
     for i in rel_list:
         path = unzip_filepath+i
-        os.chdir(path)
+        folder = os.listdir(path)
+        os.chdir(path+'/'+folder[0])
         os.system('mvn clean install -DskipTests -Drat.skip=true')
 
 

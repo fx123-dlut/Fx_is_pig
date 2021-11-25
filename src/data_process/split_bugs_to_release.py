@@ -39,8 +39,9 @@ def split_bug_to_release_by_time():
     return res
 
 def split_by_release_main_func():
-    fggr.get_release_all_info()
+    release_info = fggr.get_release_all_info()
     split_bug_to_release_by_time()
+    return release_info
 
 
 if __name__ == "__main__":

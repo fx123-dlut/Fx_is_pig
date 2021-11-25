@@ -16,7 +16,7 @@ def combine_gitlog_jira(filepath1,filepath2):
         thisvs = pat.findall(i[5])
         for j in thisvs:
             thisv = j.split(pro_name+'-')[1]
-            # print(thisv)
+            print(thisv)
             jira_data = bug_dict.get(int(thisv))
             if(jira_data != None):
                 ret.append(i + bug_dict.get(int(thisv)))

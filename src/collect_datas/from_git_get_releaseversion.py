@@ -43,6 +43,7 @@ def get_all_tag_with_commitid(path):
     res.reverse()
     print(res)
     wtx.save_to_init_xls(headers,res,c.pro_name,release_file)
+    return res,tags
 
 
 def get_release_all_info(re_write = 1):
@@ -50,7 +51,7 @@ def get_release_all_info(re_write = 1):
     release_file_path = c.res_path+"init_data/"+release_file+'.xls'
     all_commit_path = c.res_path+"init_data/git_log_info.xls"
     if not os.path.exists(release_file_path) or re_write == 1:
-        get_all_tag_with_commitid(c.path)
+        release_list,release_version = get_all_tag_with_commitid(c.path)
     all_release_commit_id = wtx.get_from_xls(release_file_path)
     # print(all_release_commit_id)
     all_commit_id = wtx.get_from_xls(all_commit_path)
@@ -63,7 +64,8 @@ def get_release_all_info(re_write = 1):
     for i in res:
         print(i)
     wtx.save_to_init_xls('',res,c.pro_name,'2_release_all_info')
+    return release_version
 
 
 if __name__ == "__main__":
-    get_release_all_info(1)
+    get_all_tag_with_commitid(c.path)

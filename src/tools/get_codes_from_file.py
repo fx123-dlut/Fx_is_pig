@@ -1,5 +1,5 @@
 def get_one_error_code_from_root(file_path,start_line,end_line,no_space = 0):
-    f = open(file_path,'r',encoding='utf-8')
+    f = open(file_path,'r',encoding='utf-8',errors='ignore')
     codes = ''
     for i in f.readlines()[start_line-1:end_line]:
         if(no_space):
