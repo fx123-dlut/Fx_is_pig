@@ -18,3 +18,5 @@ path = 'E:/projects/git/mooctest/archiva/'
 res_path = 'E:/projects/py/shiwanhuoji/Fx_is_pig/'
 
 pmd_path = 'E:/tools/漏洞检测/PMD/pmd-bin-6.36.0/bin/pmd.bat'
+
+now_pro_path = os.getcwd().replace('\\','/').split('src')[0]

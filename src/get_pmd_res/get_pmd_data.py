@@ -23,7 +23,7 @@ def mkdir_pmd():
 def pmd_analysis_project(pro_name,format = 'csv'):
     pro_path = c.res_path+'/projs/' + c.pro_name + '/unzip_repos/'+pro_name
     res_path = c.res_path+'/projs/' + c.pro_name + '/pmd_res/init_data/' + pro_name+'.'+format
-    cmd = pmd_path + " -d " + pro_path + ' -f '+ format +' -R '+'rules/rules.xml -r '+ res_path
+    cmd = pmd_path + " -d " + pro_path + ' -f '+ format +' -R '+c.now_pro_path+'/src/get_pmd_data/rules/rules.xml -r '+ res_path
     print(cmd)
     os.system(cmd)
 
@@ -97,7 +97,7 @@ def use_git_remark_pmd_res():
         this_version = file.split(c.pro_name+'-',maxsplit=1)[1].split('.csv')[0]
         pmd_res = wtx.get_from_csv(reduced_path+file)
         this_headers = pmd_res[0]+['git status']
-        print('now analyse file is : '+file)
+        print('now analyse pmd  file is : '+file)
         for fix_line in git_res:
             # print(fix_line)
             if fix_line[fix_version_col] == this_version:
