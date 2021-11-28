@@ -3,6 +3,7 @@ import configure as c
 import xml.dom.minidom as dom
 import src.tools.write_to_xls as wtx
 import src.tools.getcodes as gc
+import src.get_checkstyle_res.mark_checkout_res as mcr
 
 
 def init_folder():
@@ -56,7 +57,6 @@ def from_cs_xml_to_csv():
                 source = e.getAttribute('source')
                 res.append([errorfilename,line,severity,message,source])
         wtx.save_as_csv(headers,res,csv_path+filename.split('.xml')[0]+'.csv')
-        break
 
 
 # 根据csv获取对应的代码
@@ -80,9 +80,10 @@ def get_code_from_csv():
 # 主流程函数
 def get_checkstyle_data_main_func():
     init_folder()
-    # get_cs_init_data()
-    # from_cs_xml_to_csv()
+    get_cs_init_data()
+    from_cs_xml_to_csv()
     get_code_from_csv()
+    mcr.mark_cs_res_by_git()
 
 
 if __name__ == "__main__":

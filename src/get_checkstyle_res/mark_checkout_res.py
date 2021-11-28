@@ -3,6 +3,7 @@ import os
 import configure as c
 
 
+# 标记checkstyle结果
 def mark_cs_res_by_git():
     git_res = wtx.get_from_xls(c.res_path+'/res/2_3_2_bugs_split_by_release.xls',0)
     headers = git_res[0]
