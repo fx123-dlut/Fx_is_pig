@@ -105,7 +105,7 @@ def get_version_code(blame_res,c_len=8):
 
 def split_show_to_every_lines(file,res_file_name):
     header = ['commit id','file','code']
-    file = res_file_path + "res/" + file + ".xls"
+    file = res_file_path + "/res/" + file + ".xls"
     combine_lines =  wtx.get_from_xls(file)
     ret = []
     for line in combine_lines:

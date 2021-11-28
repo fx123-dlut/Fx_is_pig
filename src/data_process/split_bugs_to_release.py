@@ -11,11 +11,11 @@ def get_every_bug_time():
     all_init_bugs_data = wtx.get_from_xls(all_init_bugs_filename,0)
     all_commit_id_file = c.res_path+ "/res/combine.xls"
     all_commit_id_data = wtx.get_from_xls(all_commit_id_file,0)
-    headers = [all_init_bugs_data[0][0]]+all_init_bugs_data[0][2:4]+all_commit_id_data[0][0:2]
+    headers = all_init_bugs_data[0]+all_commit_id_data[0][0:2]
     for i in all_init_bugs_data[1:]:
         for j in all_commit_id_data[1:]:
             if i[0][0:8] == j[0][0:8]:
-                this_res = [i[0]]+i[2:4]+j[0:2]
+                this_res = i+j[0:2]
                 # print(this_res)
                 res.append(this_res)
                 # return

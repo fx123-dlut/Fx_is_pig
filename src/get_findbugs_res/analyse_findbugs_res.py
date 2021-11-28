@@ -108,10 +108,10 @@ def compare_xls(release_liat):
 
 def analyse_findbugs_res_main_func(release_list):
     # 从xml中提取信息到xls
-    # auto_get_xls()
+    auto_get_xls()
 
     # 获取findbugs中对应的缺陷代码行
-    # gcbfr.get_codes_from_unzip_repos()
+    gcbfr.get_codes_from_unzip_repos()
 
     # 比较结果
     release_list = compare_xls(release_list)

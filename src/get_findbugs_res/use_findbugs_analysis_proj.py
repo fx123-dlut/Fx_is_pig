@@ -14,7 +14,7 @@ def get_findbugs_xml(release_list):
     for i in version_list:
         now_rel_path = classes_folder+i
         # findbugs.bat -textui -progress -high -xml -output E:/projects/py/shiwanhuoji/Fx_is_pig//projs/archiva/findbugs_res/xml/archiva-2.2.5.xml E:/projects/py/shiwanhuoji/Fx_is_pig//projs/archiva/classes_repos/archiva-archiva-2.2.5
-        cmdline = 'findbugs.bat -textui -progress -high -xml -output '\
+        cmdline = 'findbugs.bat -textui -progress -xml -output '\
                   +res_path+i+'.xml '\
                   +now_rel_path
         print("now run commond is : "+cmdline)

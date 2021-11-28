@@ -8,12 +8,13 @@ pro_name = c.pro_name
 # git log --before='2021.06.30'  获得之前的版本
 # git log --stat 获得修改文件信息
 
-def get_data(path):
+def get_data(path,need_pull = 0):
     ct.change_path_to_target(path)
-    print('waiting for git pull')
-    ct.run_command('git pull')
-    cmd_res = ct.run_command('git log --stat --before=\'2021.06.30\'')
-    # cmd_res = ct.run_command('git log --stat')
+    if need_pull == 1:
+        print('waiting for git pull')
+        ct.run_command('git pull')
+    # cmd_res = ct.run_command('git log --stat --before=\'2021.06.30\'')
+    cmd_res = ct.run_command('git log --stat')
     res = []
     i = 1
     this_res = []

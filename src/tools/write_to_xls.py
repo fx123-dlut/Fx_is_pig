@@ -1,6 +1,7 @@
 import xlwt
 import xlrd
 import configure as c
+import csv
 
 # 将list保存到xls文件中
 def save_to_xls(headers,res,pro_name,res_file):
@@ -77,6 +78,21 @@ def get_from_xls(path,start_line= 1):
             this_res.append(j.value)
         ret.append(this_res)
     return ret
+
+
+def save_as_csv(headers,rows,filename):
+    with open(filename,'w',newline='',encoding="utf-8") as f:
+        f_csv = csv.writer(f)
+        f_csv.writerow(headers)
+        f_csv.writerows(rows)
+
+
+def get_from_csv(filename):
+    with open(filename,'r',encoding='utf-8') as f:
+        reader = csv.reader(f)
+        res = list(reader)
+    return res
+
 
 if __name__ == "__main__":
     # ret = get_from_xls('res/only_java_changed_numlessthan4_and_bugfixversion.xls')
