@@ -35,8 +35,8 @@ def from_cs_xml_to_csv():
     xml_files = os.listdir(xml_path)
     csv_path = cs_path+'/csv_res/'
     headers = ['file','line','severity','message','source']
-    res = []
     for filename in xml_files:
+        res = []
         try:
             tree = dom.parse(xml_path + filename)
         except Exception:
