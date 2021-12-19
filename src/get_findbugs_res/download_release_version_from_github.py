@@ -24,12 +24,12 @@ def download_zip_from_github(zip_path):
     release_file_name = c.res_path+"init_data/git_release_version_with_commitid.xls"
     release_file_data = wtx.get_from_xls(release_file_name)
     for i in release_file_data:
-        if os.path.exists(zip_path+i[0]+'.zip'):
+        if os.path.exists(zip_path+c.pro_name+'-'+i[0]+'.zip') or os.path.exists(zip_path+ i[0]+'.zip'):
             print("existed : "+i[0]+'.zip')
             continue
         # https://github.com/apache/archiva/archive/refs/tags/archiva-2.2.5.zip
         url = 'https://github.com/apache/'+c.pro_name+'/archive/refs/tags/'+i[0]+'.zip'
-        print("waiting for download url : "+url)
+        print(str(release_file_data.index(i)) + '/' +str(len(release_file_data))+" waiting for download url : "+url)
         wo.get_zip_from_url(url,zip_path)
         # sleep(5)
         print(url)

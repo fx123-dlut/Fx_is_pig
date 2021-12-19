@@ -19,13 +19,16 @@ def get_codes_from_unzip_repos():
         for j in file_info[1:]:
             # print(j[2])
             for k in all_files:
-                if k.find(j[2]) > 0:
-                    print("get code line from file : "+k)
-                    start = int(j[headers.index('lstart')])
-                    end = int(j[headers.index('lend')])
-                    codes = gcff.get_one_error_code_from_root(k,start,end)
-                    j[-1] = codes
-                    break
+                try:
+                    if k.find(j[2]) > 0:
+                        print("get code line from file : "+k)
+                        start = int(j[headers.index('lstart')])
+                        end = int(j[headers.index('lend')])
+                        codes = gcff.get_one_error_code_from_root(k,start,end)
+                        j[-1] = codes
+                        break
+                except Exception:
+                    continue
         wtx.save_to_targetpath_xls(headers,file_info[1:],c.pro_name,i.split('.xls')[0],findbugs_path)
 
 if __name__ == "__main__":

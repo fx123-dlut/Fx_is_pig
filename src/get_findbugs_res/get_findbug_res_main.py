@@ -9,9 +9,9 @@ def get_findbugs_res_main():
     # 获取release版本信息
     release_list = sbtr.split_by_release_main_func()
     print(release_list)
-    # # 下载zip包并解压编译获取classes
+    # 下载zip包并解压编译获取classes
     drvfg.get_classes_by_zip_main_func()
-    # # 扫描classes获取xml文件
+    # 扫描classes获取xml文件
     ufap.get_findbugs_data_main(release_list)
     # 标记findbugs结果
     afr.analyse_findbugs_res_main_func(release_list)

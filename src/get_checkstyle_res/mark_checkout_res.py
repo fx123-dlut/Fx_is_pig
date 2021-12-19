@@ -14,7 +14,7 @@ def mark_cs_res_by_git():
     reduced_path = c.res_path + '/projs/' + c.pro_name + '/checkstyle_res/csv_res/'
     cs_files = os.listdir(reduced_path)
     for file in cs_files:
-        this_version = file.split(c.pro_name + '-', maxsplit=1)[1].split('.csv')[0]
+        this_version = file.split(c.pro_name + '-', maxsplit=1)[-1].split('.csv')[0]
         cs_res = wtx.get_from_csv(reduced_path+file)
         this_headers = cs_res[0] + ['git status']
         cs_res = cs_res[1:]

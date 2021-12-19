@@ -6,7 +6,10 @@ file_base_path = 'E:\projects\git\java\cayenne_release\cayenne-4.1.B2\cayenne-se
 def get_one_line(file_path,line_number,encoding_method = 'utf-8'):
     f = open(file_path, 'r', encoding=encoding_method,errors='ignore')
     data = f.readlines()
-    return data[line_number-1]
+    try:
+        return data[line_number-1]
+    except Exception:
+        return ""
 
 
 def get_one_error_code(file_path,start_line,end_line):

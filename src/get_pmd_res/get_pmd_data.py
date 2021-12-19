@@ -23,7 +23,7 @@ def mkdir_pmd():
 def pmd_analysis_project(pro_name,format = 'csv'):
     pro_path = c.res_path+'/projs/' + c.pro_name + '/unzip_repos/'+pro_name
     res_path = c.res_path+'/projs/' + c.pro_name + '/pmd_res/init_data/' + pro_name+'.'+format
-    cmd = pmd_path + " -d " + pro_path + ' -f '+ format +' -R '+c.now_pro_path+'/src/get_pmd_data/rules/rules.xml -r '+ res_path
+    cmd = pmd_path + " -d " + pro_path + ' -f '+ format +' -R '+c.now_pro_path+'/src/get_pmd_res/rules/rules.xml -r '+ res_path
     print(cmd)
     os.system(cmd)
 
@@ -40,7 +40,7 @@ def anaylyse_all_release():
 def get_code_from_csv():
     csv_path = c.res_path+'/projs/'+c.pro_name+'/pmd_res/init_data/'
     files = os.listdir(csv_path)
-    for i in files[8:]:
+    for i in files:
         print("now get codes file is : " + i)
         data = wtx.get_from_csv(csv_path+i)
         headers = data[0]
@@ -52,13 +52,16 @@ def get_code_from_csv():
         else:
             res_headers = headers+['code']
         for line in data[1:]:
-            filepath = line[data[0].index('File')]
-            start_line = int(line[data[0].index('Line')])
-            code = gc.get_one_line(filepath, start_line)
-            if not has_code:
-                res.append(line + [code])
-            else:
-                res.append(line)
+            try:
+                filepath = line[data[0].index('File')]
+                start_line = int(line[data[0].index('Line')])
+                code = gc.get_one_line(filepath, start_line)
+                if not has_code:
+                    res.append(line + [code])
+                else:
+                    res.append(line)
+            except Exception:
+                continue
         wtx.save_as_csv(res_headers,res,csv_path+i)
 
 
@@ -94,7 +97,7 @@ def use_git_remark_pmd_res():
 
     red_fils = os.listdir(reduced_path)
     for file in red_fils:
-        this_version = file.split(c.pro_name+'-',maxsplit=1)[1].split('.csv')[0]
+        this_version = file.split(c.pro_name+'-',maxsplit=1)[-1].split('.csv')[0]
         pmd_res = wtx.get_from_csv(reduced_path+file)
         this_headers = pmd_res[0]+['git status']
         print('now analyse pmd  file is : '+file)

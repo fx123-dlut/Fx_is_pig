@@ -14,7 +14,7 @@ def get_all_release_version_after_maven():
         # 切换到对应项目目录
         os.chdir(c.path)
         # git checkout archiva1.1 切换到指定的release
-        cmdline = 'git checkout ' + i[0]
+        cmdline = 'git checkout -f ' + i[0]
         print("now run : " + cmdline)
         os.system(cmdline)
         sleep(5)

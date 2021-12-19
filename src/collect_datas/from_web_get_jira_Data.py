@@ -30,7 +30,7 @@ def get_value_from_web(root,re_expression):
         return value[-1].strip()
 
 
-def get_info(res,start= 0):
+def get_info(res, start=0, index=0):
     for i in range(start,max):
         # print(str(i) + str(len(res)))
         try:
@@ -70,11 +70,15 @@ def get_info(res,start= 0):
             res.append(this_res)
             print(this_res)
             # print(res)
-        except Exception:
+        except Exception as e:
+            if(index == 5):
+                index = 1
+                print('time out more than 5 times')
+                continue
             print('connection wrong ,waiting 1 seconds and try again...')
-            print(Exception.__name__)
+            print(repr(e))
             # sleep(5)
-            get_info(res,len(res))
+            get_info(res,i,index+1)
             break
     return res
 

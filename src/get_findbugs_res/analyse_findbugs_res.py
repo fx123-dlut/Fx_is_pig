@@ -33,7 +33,7 @@ def get_xls_by_true_filename(xml_path,file_name,res_path):
                 sourcepath = root2.getAttribute("sourcepath")
                 start = root2.getAttribute("start")
                 end = root2.getAttribute("end")
-            res.append([method_name,signature,sourcepath,classname,start,end,priority,desc])
+                res.append([method_name,signature,sourcepath,classname,start,end,priority,desc])
         wtx.save_to_targetpath_xls(heads,res,c.pro_name,filename.split('.xml')[0],res_path)
 
 

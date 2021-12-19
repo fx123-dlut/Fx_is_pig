@@ -38,7 +38,7 @@ def get_del_add_line(no_anno_list,add_del_lines_file,path,commit_dict):
             this_res.append(del_line)
         print(this_res)
         ret.append(this_res)
-    wtx.save_to_xls(lines_headers,ret,'add_del_lines',add_del_lines_file)
+    wtx.save_as_csv(lines_headers,ret,c.res_path+'/res/'+add_del_lines_file+'.csv')
     return ret
 
 # 获取genericbugfixlines，详细见文档
@@ -48,18 +48,18 @@ def get_generic_bug_lines(add_del_lines_list,path,res_file,commit_file):
     # commit_v = glv.get_commit_id(commit_file,8,False)
     commit_v = glv.get_commit_id(commit_file,8)
     keys = list(commit_v.keys())
-    for i in add_del_lines_list:
+    for i in add_del_lines_list[1:]:
         print(i[0])
         v = commit_v.get(i[0][0:8])
         # print(commit_v)
         end_version = keys[v+1]
         print("now_V:"+i[0] + " end_v:"+ end_version)
-        check_out_command = "git checkout "+end_version
+        check_out_command = "git checkout -f "+end_version
         print(check_out_command)
         ct.run_command('git stash')
         ct.run_command(check_out_command)
         sleep(10)
-        for num in range(0,int(i[1])):
+        for num in range(0,int(i[1].split('.')[0])):
             col = i[4+num*2]
             file_and_del = col.split('*@*')
             blame_command = 'git blame -s -f '+file_and_del[0]
@@ -68,7 +68,7 @@ def get_generic_bug_lines(add_del_lines_list,path,res_file,commit_file):
             cid_code = get_version_code(cmd_blame_res)
             # print(cid_code)
             ret = ret + get_start_v_list(cid_code,file_and_del[1:],end_version,file_and_del[0],commit_v,i[0],v)
-    wtx.save_to_xls(generic_bug_line_headers,ret,'generic_bug_lines',res_file)
+    wtx.save_as_csv(generic_bug_line_headers,ret,res_file)
     return ret
 
 def get_start_v_list(blame_lines,fix_lines,end_v,file_name,commit_v,now_cid,now_v):
@@ -84,7 +84,10 @@ def get_start_v_list(blame_lines,fix_lines,end_v,file_name,commit_v,now_cid,now_
             if(j[1] == i[1:].strip()):
                 # print(end_v)
                 # print(j[0])
-                ret.append([file_name,j[2],j[1],j[0],commit_v.get(j[0])+1,end_v,commit_v.get(end_v)+1,now_cid,now_v+1])
+                try:
+                    ret.append([file_name,j[2],j[1],j[0],commit_v.get(j[0])+1,end_v,commit_v.get(end_v)+1,now_cid,now_v+1])
+                except Exception as e:
+                    print(repr(e))
                 break
     print(ret)
     return ret
@@ -105,11 +108,11 @@ def get_version_code(blame_res,c_len=8):
 
 def split_show_to_every_lines(file,res_file_name):
     header = ['commit id','file','code']
-    file = res_file_path + "/res/" + file + ".xls"
-    combine_lines =  wtx.get_from_xls(file)
+    file = res_file_path + "/res/" + file + ".csv"
+    combine_lines = wtx.get_from_csv(file)
     ret = []
-    for line in combine_lines:
-        for i in range(0,int(line[1])):
+    for line in combine_lines[1:]:
+        for i in range(0,int(line[1].split('.')[0])):
             col = line[4+i*2]
             code_line = col.split('*@*')
             for code in code_line[1:]:
@@ -117,7 +120,7 @@ def split_show_to_every_lines(file,res_file_name):
                 # print(code[1:].strip())
                 # print(this_res)
                 ret.append(this_res)
-    wtx.save_to_xls(header,ret,'all line',res_file_name)
+    wtx.save_as_csv(header,ret,res_file_name)
     return ret
 
 # 嵌套list去重

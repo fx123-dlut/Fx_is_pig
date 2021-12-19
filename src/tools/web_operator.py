@@ -18,12 +18,14 @@ def get_zip_from_url(url,down_path):
     adapter = HTTPAdapter(max_retries=retry)
     s.mount('https://', adapter)
     s.keep_alive = False
+    # noinspection PyBroadException
     try:
-        response = s.get(url,timeout=5)
+        response = s.get(url)
         data = response.content
         with open(down_path + url.split('/')[-1], 'wb') as f:
             f.write(data)
-    except Exception:
+    except Exception as e:
+        print(repr(e))
         s.close()
         print("wait 10 second and try again : "+url)
         sleep(10)

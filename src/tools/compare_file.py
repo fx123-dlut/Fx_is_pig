@@ -47,10 +47,9 @@ def fix_lost_codes(code_list,nlfile,commit_v,path):
             this_file = ''
             print(this_cid)
             ct.run_command('git stash')
-            checkout = 'git checkout '+now_last_list.get(this_cid)
+            checkout = 'git checkout -f '+now_last_list.get(this_cid)
             print(checkout)
             ct.run_command(checkout)
-            sleep(10)
         if(this_file != i[1]):
             this_file = i[1]
             blame_command = 'git blame -s -f '+this_file

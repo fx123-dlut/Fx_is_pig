@@ -21,17 +21,17 @@ def main_func():
     combine_1gobv_1naf_path = res_file_path+'/res/'+combine_1gobv_1naf_name+'.xls'
 
     add_del_lines_file = '2_1_add_del_lines_NoAnno_and_less4'
-    add_del_lines_path = res_file_path+"/res/"+add_del_lines_file+'.xls'
+    add_del_lines_path = res_file_path+"res/"+add_del_lines_file+'.csv'
     generic_bug_line_file = '2_2_generic_bug_lines_with_now_version'
-    generic_bug_line_path = res_file_path+"/res/"+generic_bug_line_file+'.xls'
+    generic_bug_line_path = res_file_path+"/res/"+generic_bug_line_file+'.csv'
     every_line_file_name = '2_3_from_show_every_lines'
-    every_line_file_path = res_file_path+'/res/'+every_line_file_name+'.xls'
+    every_line_file_path = res_file_path+'/res/'+every_line_file_name+'.csv'
     now_last_file_name = '2_4_now_last'
     now_last_file_path = res_file_path+'/res/'+now_last_file_name+'.xls'
 
     # 获取初始数据
     # gdm.get_data()
-    # ################################################
+    # #### ############################################
     # 过滤非java文件
     file_data = wtx.get_from_xls(commit_id_file)
     # cv = f.filter_not_bug_version(file_data)
@@ -63,20 +63,20 @@ def main_func():
         print("file "+add_del_lines_file+" is already exists")
     # ##########################################################
     # 获取generic-bug-fix-line
-    add_del_lines_list = wtx.get_from_xls(add_del_lines_path)
+    add_del_lines_list = wtx.get_from_csv(add_del_lines_path)
     # print(add_del_lines_list)
-    if(os.path.exists(generic_bug_line_path)==False):
-        ggbl.get_generic_bug_lines(add_del_lines_list,path,generic_bug_line_file,commit_id_file)
+    if not os.path.exists(generic_bug_line_path):
+        ggbl.get_generic_bug_lines(add_del_lines_list,path,generic_bug_line_path,commit_id_file)
     else:
         print("file "+generic_bug_line_file+" is already exists")
-    generic_bug_lines = wtx.get_from_xls(generic_bug_line_path)
+    generic_bug_lines = wtx.get_from_csv(generic_bug_line_path)
 
     # commit_dict_withoutNone = gci.get_commit_id(commit_id_file,8,False)
     commit_dict_withoutNone = gci.get_commit_id(commit_id_file,8)
     print(commit_dict_withoutNone)
     #####################################################################
     # 讲代码分开分成表格中的一行对应一个带吗行
-    ggbl.split_show_to_every_lines(add_del_lines_file,every_line_file_name)
+    ggbl.split_show_to_every_lines(add_del_lines_file,every_line_file_path)
     # #####################################################################
     # 获取遗漏的行
     commit_dict = gci.get_commit_id(commit_id_file,8,True)

@@ -88,8 +88,10 @@ def save_as_csv(headers,rows,filename):
 
 
 def get_from_csv(filename):
-    with open(filename,'r',encoding='utf-8') as f:
-        reader = csv.reader(f)
+    csv.field_size_limit(500 * 1024 * 1024)
+    with open(filename,'r',encoding='utf-8',errors='ignore') as f:
+        # 防止错误_csv.Error: line contains NULL byte
+        reader = csv.reader(_.replace('\x00', '') for _ in f)
         res = list(reader)
     return res
 

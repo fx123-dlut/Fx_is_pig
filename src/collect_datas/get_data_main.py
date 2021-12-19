@@ -6,6 +6,8 @@ import configure as c
 
 
 def get_data():
+    if not os.path.exists(c.res_path):
+        os.mkdir(c.res_path)
     if not os.path.exists(c.res_path + '/init_data'):
         os.mkdir(c.res_path+'/init_data')
     if not os.path.exists(c.res_path+'/res'):

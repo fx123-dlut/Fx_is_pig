@@ -72,7 +72,10 @@ def get_code_from_csv():
         for line in data:
             if len(line) == 6:
                 continue
-            code = gc.get_one_line(line[headers.index('file')],int(line[headers.index('line')]))
+            try:
+                code = gc.get_one_line(line[headers.index('file')],int(line[headers.index('line')]))
+            except Exception:
+                code = ''
             data[data.index(line)] = line+[code]
         wtx.save_as_csv(headers,data,csv_path+i)
 
