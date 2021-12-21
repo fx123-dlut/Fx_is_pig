@@ -86,7 +86,7 @@ def remove_same_line():
 
 # 使用fix的结果标记pmd的结果
 def use_git_remark_pmd_res():
-    git_res = wtx.get_from_xls(c.res_path+'/res/2_3_2_bugs_split_by_release.xls',0)
+    git_res = wtx.get_from_csv(c.res_path+'/res/2_3_2_bugs_split_by_release.csv')
     headers = git_res[0]
     git_res = git_res[1:]
     reduced_path = c.res_path + '/projs/' + c.pro_name + '/pmd_res/reduced_data/'
@@ -126,7 +126,7 @@ def get_no_find_git_res(headers,git_res,has_used_list):
             continue
         res.append(git_res[index])
         index = index + 1
-    wtx.save_to_targetpath_xls(headers,res,c.pro_name,'not_used_gitline',c.res_path+'/projs/'+c.pro_name+'/pmd_res/')
+    wtx.save_as_csv(headers,res,c.res_path+'/projs/'+c.pro_name+'/pmd_res/not_used_gitline.csv')
 
 
 # 压缩pmd结果，将相邻的行和并（没用到）

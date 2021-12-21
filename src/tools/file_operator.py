@@ -32,7 +32,12 @@ def copy_classes_to_targetpath():
 
 # 获取多层目录下所有名字的文件夹
 def get_all_directory(path,all_file_full_path_list,target_folder):
-    all_file_list = os.listdir(path)
+    try:
+        all_file_list = os.listdir(path.replace('\\','/')+'/')
+    except FileNotFoundError as e:
+        print(repr(e))
+        print(path.replace('\\','/')+'/')
+        return all_file_full_path_list
     for file in all_file_list:
         file_path = os.path.join(path,file)
         if os.path.isdir(file_path):
@@ -44,7 +49,12 @@ def get_all_directory(path,all_file_full_path_list,target_folder):
 
 # 获取文件夹下多层目录所有的文件名
 def get_all_file(path,all_file_full_path_list,target_file):
-    all_file_list = os.listdir(path)
+    try:
+        all_file_list = os.listdir(path.replace('\\','/')+'/')
+    except FileNotFoundError as e:
+        print(repr(e))
+        print(path.replace('\\','/')+'/')
+        return all_file_full_path_list
     for file in all_file_list:
         file_path = os.path.join(path,file)
         if os.path.isdir(file_path):

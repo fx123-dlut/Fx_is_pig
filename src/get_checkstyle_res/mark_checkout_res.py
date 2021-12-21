@@ -5,7 +5,7 @@ import configure as c
 
 # 标记checkstyle结果
 def mark_cs_res_by_git():
-    git_res = wtx.get_from_xls(c.res_path+'/res/2_3_2_bugs_split_by_release.xls',0)
+    git_res = wtx.get_from_csv(c.res_path+'/res/2_3_2_bugs_split_by_release.csv')
     headers = git_res[0]
     git_res = git_res[1:]
     fix_version_col,fix_file_col,fix_code_col = headers.index('release version'),headers.index('file'),headers.index('code')
@@ -43,7 +43,7 @@ def get_no_find_git_res(headers,git_res,has_used_list):
             continue
         res.append(git_res[index])
         index = index + 1
-    wtx.save_to_targetpath_xls(headers,res,c.pro_name,'not_used_gitline',c.res_path+'/projs/'+c.pro_name+'/checkstyle_res/')
+    wtx.save_as_csv(headers,res,c.res_path+'/projs/'+c.pro_name+'/checkstyle_res/'+'not_used_gitline.csv')
 
 
 if __name__ == "__main__":

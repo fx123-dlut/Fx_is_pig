@@ -20,8 +20,8 @@ def init_git_mark_res(git_res):
 
 def mark_tp_findbugs_line_by_res():
     root_path = c.res_path
-    generate_bug_line_path = root_path+'res/2_3_2_bugs_split_by_release.xls'
-    generate_bug_lines = wtx.get_from_xls(generate_bug_line_path,0)
+    generate_bug_line_path = root_path+'res/2_3_2_bugs_split_by_release.csv'
+    generate_bug_lines = wtx.get_from_csv(generate_bug_line_path)
     headers = generate_bug_lines[0]
     old_version = ''
     index = 1
