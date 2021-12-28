@@ -79,14 +79,14 @@ def auto_compare_xls_by_filename(release_list):
                     flag = 0
                     break
             if flag == 1:
-                res.append(old_rownum+['new'])
+                res.append(old_rownum+['true'])
         wtx.save_to_targetpath_xls(headers,res,'compare_res',file_name,res_path)
 
 
 def compare_xls_inorder(rel_list):
     auto_compare_xls_by_filename(rel_list)
 
-
+0
 def compare_xls(release_liat):
     xls_path = c.res_path+ '/projs/' + c.pro_name+'/findbugs_res/xls'
     xls_files = os.listdir(xls_path)

@@ -44,6 +44,7 @@ def save_to_targetpath_xls(headers,res,pro_name,res_file,path):
             line = line + 1
         line = 0
         row = row + 1
+    print('save to '+path+'/'+res_file+".xls")
     xls.save(path+'/'+res_file+".xls")
 
 
@@ -78,6 +79,14 @@ def get_from_xls(path,start_line= 1):
             this_res.append(j.value)
         ret.append(this_res)
     return ret
+
+
+
+def get_from_file(file_path,file_type,start_line=0):
+    data = []
+    if file_type == 'csv':
+        return get_from_csv(file_path)[start_line:]
+    return get_from_xls(file_path,start_line)[start_line:]
 
 
 def save_as_csv(headers,rows,filename):

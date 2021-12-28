@@ -2,13 +2,14 @@ import os
 import src.tools.write_to_xls as wtx
 import src.tools.cmd_tool as ct
 import configure as c
+import src.tools.time_operator as to
 
 release_file = 'git_release_version_with_commitid'
 
 
 def get_all_tag_name(path,filter = 0):
     os.chdir(path)
-    cmd = 'git tag'
+    cmd = 'git tag --sort=taggerdate'
     run_res = os.popen(cmd).readlines()
     tags = []
     for i in run_res:
@@ -23,6 +24,7 @@ def get_all_tag_name(path,filter = 0):
 
 def get_all_tag_with_commitid(path):
     res = []
+    times = []
     headers = ['release version','commit id','commit time']
     tags = get_all_tag_name(path)
     for i in tags:
@@ -38,12 +40,30 @@ def get_all_tag_with_commitid(path):
                 date = line.split('Date: ')[1].replace('\n','').strip()
             if comid != '' and date != '':
                 res.append([i,comid,date])
+                times.append(date)
                 break
-
+    print(len(res))
+    wtx.save_to_init_xls(headers,res,c.pro_name,'git_release_without_sort')
+    res = sort_by_time(res,-1,times)
+    print(len(res))
     res.reverse()
     print(res)
     wtx.save_to_init_xls(headers,res,c.pro_name,release_file)
     return res,tags
+
+
+def sort_by_time(list,index,date):
+    print(date)
+    date_list = to.get_sort_res(date)
+    res = []
+    tag = [0 for i in range(len(list))]
+    for i in date_list:
+        for j in list:
+            if j[index] == i and tag[list.index(j)] != 1:
+                res.append(j)
+                tag[list.index(j)] = 1
+                break
+    return res
 
 
 def get_release_all_info(re_write = 1):

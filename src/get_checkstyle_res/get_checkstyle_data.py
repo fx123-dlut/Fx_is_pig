@@ -14,6 +14,8 @@ def init_folder():
         os.mkdir(res_path+'/xml_res/')
     if not os.path.exists(res_path+'/csv_res/'):
         os.mkdir(res_path+'/csv_res/')
+    if not os.path.exists(res_path+'/diff_res/'):
+        os.mkdir(res_path+'/diff_res/')
 
 
 # 使用checkstyle分析项目获取xml文件
@@ -80,6 +82,42 @@ def get_code_from_csv():
         wtx.save_as_csv(headers,data,csv_path+i)
 
 
+# diff标记，用后一个版本标记前一个版本
+def use_self_remark_checkstyle_res():
+    csv_res = c.res_path + '/projs/' + c.pro_name + '/checkstyle_res/csv_res/'
+    file_type = os.listdir(csv_res)[0].split('.')[-1]
+    release_path = c.res_path+'/init_data/git_release_version_with_commitid.xls'
+    release_data = wtx.get_from_xls(release_path)
+    for i in range(3,len(release_data)-1):
+        print("checkstyle: now diff use version is : "+release_data[i][0]+'.'+file_type)
+        try:
+            old_data = wtx.get_from_file(csv_res+release_data[i][0]+'.'+file_type,file_type)
+            new_data = wtx.get_from_file(csv_res+release_data[i+1][0]+'.'+file_type,file_type,1)
+        except FileNotFoundError as e:
+            print("checkstyle res not found")
+            continue
+        if old_data[0][-1] != 'diff_status':
+            headers = old_data[0] + ['diff_status']
+        else:
+            headers = old_data[0]
+        file_index = headers.index('file')
+        code_index = headers.index('code')
+        res = []
+        for n in range(len(new_data)):
+            sys.stdout.write("\r" + "now analyse pmd diff position is :"+str(n)+'/'+str(len(new_data)))
+            sys.stdout.flush()
+            for j in range(len(old_data)):
+                if new_data[n][file_index].split('src')[-1] == old_data[j][file_index].split('src')[-1] \
+                        and new_data[n][code_index].strip() == old_data[j][code_index].strip():
+                    tag = 0
+                    if len(new_data)+1 != len(headers):
+                        res.append(new_data[n]+['','true'])
+                    else:
+                        res.append(new_data[n]+['true'])
+                    n = n + 1
+        wtx.save_as_csv(headers,res,c.res_path + '/projs/' + c.pro_name + '/checkstyle_res/diff_res/'+release_data[i][0]+'.'+file_type)
+
+
 # 主流程函数
 def get_checkstyle_data_main_func():
     init_folder()
@@ -87,6 +125,7 @@ def get_checkstyle_data_main_func():
     from_cs_xml_to_csv()
     get_code_from_csv()
     mcr.mark_cs_res_by_git()
+    use_self_remark_checkstyle_res()
 
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@ import os
 import src.tools.write_to_xls as wtx
 import src.tools.getcodes as gc
 import configure as c
+import sys
 
 # cmd = [pmd.bat path] output_path -f xml -R [rule path] -r filepath
 
@@ -17,6 +18,8 @@ def mkdir_pmd():
         os.mkdir(root_path+"/pmd_res/init_data")
     if not os.path.exists(root_path+"/pmd_res/reduced_data"):
         os.mkdir(root_path+"/pmd_res/reduced_data")
+    if not os.path.exists(root_path+"/pmd_res/diff_data"):
+        os.mkdir(root_path+"/pmd_res/diff_data")
 
 
 # 使用pmd语句分析项目
@@ -99,7 +102,13 @@ def use_git_remark_pmd_res():
     for file in red_fils:
         this_version = file.split(c.pro_name+'-',maxsplit=1)[-1].split('.csv')[0]
         pmd_res = wtx.get_from_csv(reduced_path+file)
-        this_headers = pmd_res[0]+['git status']
+        if os.path.exists(reduced_path+file):
+            print("pmd: "+ reduced_path+file + " already exists!")
+            continue
+        if headers[-1] !='git status':
+            this_headers = pmd_res[0]+['git status']
+        else:
+            this_headers = pmd_res[0]
         print('now analyse pmd  file is : '+file)
         for fix_line in git_res:
             # print(fix_line)
@@ -151,12 +160,49 @@ def compression_xls(filename):
     wtx.save_as_csv(pmd_data_set[0],res,'res/1_compression_data.csv')
 
 
+
+# diff标记：用后一个版本标记前一个版本
+def use_self_remark_pmd_res():
+    reduced_path = c.res_path + '/projs/' + c.pro_name + '/pmd_res/reduced_data/'
+    file_type = os.listdir(reduced_path)[0].split('.')[-1]
+    release_path = c.res_path+'/init_data/git_release_version_with_commitid.xls'
+    release_data = wtx.get_from_xls(release_path)
+    for i in range(len(release_data)-1):
+        old_data = wtx.get_from_file(reduced_path+release_data[i][0]+'.'+file_type,file_type)
+        new_data = wtx.get_from_file(reduced_path+release_data[i+1][0]+'.'+file_type,file_type,1)
+        if os.path.exists(c.res_path + '/projs/' + c.pro_name + '/pmd_res/diff_data/'+release_data[i][0]+'.'+file_type):
+            print("pmd: "+ c.res_path + '/projs/' + c.pro_name + '/pmd_res/diff_data/'+release_data[i][0]+'.'+file_type + " already exists!")
+            continue
+
+        print("pmd: now diff use version is : "+release_data[i][0]+'.'+file_type)
+        if old_data[0][-1] != 'diff_status':
+            headers = old_data[0] + ['diff_status']
+        else:
+            headers = old_data[0]
+        file_index = headers.index('File')
+        code_index = headers.index('code')
+        res = []
+        for n in range(len(new_data)):
+            sys.stdout.write("\r" + "now analyse pmd diff position is :"+str(n)+'/'+str(len(new_data)))
+            sys.stdout.flush()
+            for j in range(len(old_data)):
+                if new_data[n][file_index].split('src')[-1] == old_data[j][file_index].split('src')[-1] \
+                        and new_data[n][code_index].strip() == old_data[j][code_index].strip():
+                    if len(new_data)+1 != len(headers):
+                        res.append(new_data[n]+['','true'])
+                    else:
+                        res.append(new_data[n]+['true'])
+                    n = n + 1
+        wtx.save_as_csv(headers,res,c.res_path + '/projs/' + c.pro_name + '/pmd_res/diff_data/'+release_data[i][0]+'.'+file_type)
+
+
 def get_pmd_res_main_func():
     mkdir_pmd()
-    anaylyse_all_release()
-    get_code_from_csv()
-    remove_same_line()
+    # anaylyse_all_release()
+    # get_code_from_csv()
+    # remove_same_line()
     use_git_remark_pmd_res()
+    use_self_remark_pmd_res()
 
 
 if __name__=="__main__":
