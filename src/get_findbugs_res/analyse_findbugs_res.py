@@ -31,6 +31,8 @@ def get_xls_by_true_filename(xml_path,file_name,res_path):
                 method_name = croot.getAttribute("name")
                 root2 = croot.getElementsByTagName("SourceLine")[0]
                 sourcepath = root2.getAttribute("sourcepath")
+                if 'test' in sourcepath or 'Test' in sourcepath:
+                    continue
                 start = root2.getAttribute("start")
                 end = root2.getAttribute("end")
                 res.append([method_name,signature,sourcepath,classname,start,end,priority,desc])

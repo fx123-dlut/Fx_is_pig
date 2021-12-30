@@ -76,16 +76,25 @@ def remove_same_line():
     for i in files:
         print('removing the same line in files : '+i)
         data = wtx.get_from_csv(csv_path+i)
+        headers = data[0]
+        file_col = headers.index('File')
+        line_col = headers.index('Line')
         pre = data[1]
         res = [data[1]]
+        if os.path.exists(res_path+i):
+            print("pmd: "+ res_path+i + " already exists!")
+            continue
         for j in data[2:]:
-            if pre[1:5] == j[1:5]:
+            if (pre[file_col] == j[file_col] and pre[line_col] == j[line_col]) or isTargetorTest(pre[file_col]):
                 continue
             else:
                 pre = j
                 res.append(j)
         wtx.save_as_csv(data[0],res,res_path+i)
 
+
+def isTargetorTest(s):
+    return '/target/' in s or '\\target\\' in s or 'Test' in s or 'test' in s
 
 # 使用fix的结果标记pmd的结果
 def use_git_remark_pmd_res():
@@ -102,9 +111,6 @@ def use_git_remark_pmd_res():
     for file in red_fils:
         this_version = file.split(c.pro_name+'-',maxsplit=1)[-1].split('.csv')[0]
         pmd_res = wtx.get_from_csv(reduced_path+file)
-        if os.path.exists(reduced_path+file):
-            print("pmd: "+ reduced_path+file + " already exists!")
-            continue
         if headers[-1] !='git status':
             this_headers = pmd_res[0]+['git status']
         else:
@@ -121,7 +127,7 @@ def use_git_remark_pmd_res():
                             pmd_res[pmd_res.index(pmd_line)] = pmd_line+['true']
                             print([fix_line[fix_version_col],this_version]+[pmd_line[4]]+[pmd_line[pmd_res[0].index('code')]])
                         break
-        wtx.save_as_csv(this_headers,pmd_res,reduced_path+file)
+        wtx.save_as_csv(this_headers,pmd_res[1:],reduced_path+file)
     get_no_find_git_res(headers,git_res,has_used)
 
 
@@ -170,30 +176,31 @@ def use_self_remark_pmd_res():
     for i in range(len(release_data)-1):
         old_data = wtx.get_from_file(reduced_path+release_data[i][0]+'.'+file_type,file_type)
         new_data = wtx.get_from_file(reduced_path+release_data[i+1][0]+'.'+file_type,file_type,1)
-        if os.path.exists(c.res_path + '/projs/' + c.pro_name + '/pmd_res/diff_data/'+release_data[i][0]+'.'+file_type):
-            print("pmd: "+ c.res_path + '/projs/' + c.pro_name + '/pmd_res/diff_data/'+release_data[i][0]+'.'+file_type + " already exists!")
+        print("\npmd: now diff use version is : " + release_data[i][0] + '.' + file_type + "; now diff version is : " +
+              release_data[i + 1][0] + '.' + file_type)
+
+        if os.path.exists(c.res_path + '/projs/' + c.pro_name + '/pmd_res/diff_data/'+release_data[i+1][0]+'.'+file_type):
+            print("pmd: "+ c.res_path + '/projs/' + c.pro_name + '/pmd_res/diff_data/'+release_data[i+1][0]+'.'+file_type + " already exists!")
             continue
 
-        print("pmd: now diff use version is : "+release_data[i][0]+'.'+file_type)
         if old_data[0][-1] != 'diff_status':
             headers = old_data[0] + ['diff_status']
         else:
             headers = old_data[0]
         file_index = headers.index('File')
         code_index = headers.index('code')
-        res = []
         for n in range(len(new_data)):
-            sys.stdout.write("\r" + "now analyse pmd diff position is :"+str(n)+'/'+str(len(new_data)))
+            sys.stdout.write("\r" + "now analyse pmd diff position is :"+str(n)+'/'+str(len(new_data)) + " ;old_data lens is : "+str(len(old_data)))
             sys.stdout.flush()
             for j in range(len(old_data)):
                 if new_data[n][file_index].split('src')[-1] == old_data[j][file_index].split('src')[-1] \
                         and new_data[n][code_index].strip() == old_data[j][code_index].strip():
                     if len(new_data)+1 != len(headers):
-                        res.append(new_data[n]+['','true'])
+                        new_data[n] = new_data[n]+['','true']
                     else:
-                        res.append(new_data[n]+['true'])
-                    n = n + 1
-        wtx.save_as_csv(headers,res,c.res_path + '/projs/' + c.pro_name + '/pmd_res/diff_data/'+release_data[i][0]+'.'+file_type)
+                        new_data[n] = new_data[n]+['true']
+                    break
+        wtx.save_as_csv(headers,new_data,c.res_path + '/projs/' + c.pro_name + '/pmd_res/diff_data/'+release_data[i+1][0]+'.'+file_type)
 
 
 def get_pmd_res_main_func():
@@ -201,7 +208,7 @@ def get_pmd_res_main_func():
     # anaylyse_all_release()
     # get_code_from_csv()
     # remove_same_line()
-    use_git_remark_pmd_res()
+    # use_git_remark_pmd_res()
     use_self_remark_pmd_res()
 
 

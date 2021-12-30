@@ -1,5 +1,6 @@
 import os
 import configure as c
+import sys
 import xml.dom.minidom as dom
 import src.tools.write_to_xls as wtx
 import src.tools.getcodes as gc
@@ -30,6 +31,11 @@ def get_cs_init_data():
         os.system(cmd)
 
 
+
+def isTargetorTest(s):
+    return '/target/' in s or '\\target\\' in s or 'Test' in s or 'test' in s
+
+
 # 根据xml获取csv文件
 def from_cs_xml_to_csv():
     cs_path = c.res_path + '/projs/' + c.pro_name + '/checkstyle_res/'
@@ -46,6 +52,8 @@ def from_cs_xml_to_csv():
         root = tree.documentElement
         print('now get csv from checkstyle file : '+filename)
         files = root.getElementsByTagName("file")
+        if isTargetorTest(files):
+            continue
         for f in files:
             errorfilename = f.getAttribute('name').replace('\\','/')
             # print(filename[-4:] + " "+ filename[-9:-5])
@@ -102,20 +110,18 @@ def use_self_remark_checkstyle_res():
             headers = old_data[0]
         file_index = headers.index('file')
         code_index = headers.index('code')
-        res = []
         for n in range(len(new_data)):
             sys.stdout.write("\r" + "now analyse pmd diff position is :"+str(n)+'/'+str(len(new_data)))
             sys.stdout.flush()
             for j in range(len(old_data)):
                 if new_data[n][file_index].split('src')[-1] == old_data[j][file_index].split('src')[-1] \
                         and new_data[n][code_index].strip() == old_data[j][code_index].strip():
-                    tag = 0
                     if len(new_data)+1 != len(headers):
-                        res.append(new_data[n]+['','true'])
+                        new_data[n] = new_data[n]+['','true']
                     else:
-                        res.append(new_data[n]+['true'])
-                    n = n + 1
-        wtx.save_as_csv(headers,res,c.res_path + '/projs/' + c.pro_name + '/checkstyle_res/diff_res/'+release_data[i][0]+'.'+file_type)
+                        new_data[n] = new_data[n]+['true']
+                    break
+        wtx.save_as_csv(headers,new_data,c.res_path + '/projs/' + c.pro_name + '/checkstyle_res/diff_res/'+release_data[i][0]+'.'+file_type)
 
 
 # 主流程函数
