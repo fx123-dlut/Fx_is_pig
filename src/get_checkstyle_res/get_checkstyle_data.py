@@ -44,6 +44,7 @@ def from_cs_xml_to_csv():
     csv_path = cs_path+'/csv_res/'
     headers = ['file','line','severity','message','source']
     for filename in xml_files:
+        old = []
         res = []
         try:
             tree = dom.parse(xml_path + filename)
@@ -52,10 +53,10 @@ def from_cs_xml_to_csv():
         root = tree.documentElement
         print('now get csv from checkstyle file : '+filename)
         files = root.getElementsByTagName("file")
-        if isTargetorTest(files):
-            continue
         for f in files:
             errorfilename = f.getAttribute('name').replace('\\','/')
+            if isTargetorTest(errorfilename):
+                continue
             # print(filename[-4:] + " "+ filename[-9:-5])
             if errorfilename[-4:] != 'java' or errorfilename[-9:-5] == 'Test':
                 continue
@@ -65,6 +66,10 @@ def from_cs_xml_to_csv():
                 severity = e.getAttribute('severity')
                 message = e.getAttribute('message')
                 source = e.getAttribute('source')
+                if old != [errorfilename,line]:
+                    old = [errorfilename,line]
+                else:
+                    continue
                 res.append([errorfilename,line,severity,message,source])
         wtx.save_as_csv(headers,res,csv_path+filename.split('.xml')[0]+'.csv')
 
@@ -127,8 +132,8 @@ def use_self_remark_checkstyle_res():
 # 主流程函数
 def get_checkstyle_data_main_func():
     init_folder()
-    get_cs_init_data()
-    from_cs_xml_to_csv()
+    # get_cs_init_data()
+    # from_cs_xml_to_csv()
     get_code_from_csv()
     mcr.mark_cs_res_by_git()
     use_self_remark_checkstyle_res()
@@ -136,4 +141,3 @@ def get_checkstyle_data_main_func():
 
 if __name__ == "__main__":
     get_checkstyle_data_main_func()
-    # print(len([1,2,3]))

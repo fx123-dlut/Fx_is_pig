@@ -205,10 +205,10 @@ def use_self_remark_pmd_res():
 
 def get_pmd_res_main_func():
     mkdir_pmd()
-    # anaylyse_all_release()
-    # get_code_from_csv()
-    # remove_same_line()
-    # use_git_remark_pmd_res()
+    anaylyse_all_release()
+    get_code_from_csv()
+    remove_same_line()
+    use_git_remark_pmd_res()
     use_self_remark_pmd_res()
 
 
