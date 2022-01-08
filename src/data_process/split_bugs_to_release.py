@@ -38,8 +38,6 @@ def split_bug_to_release_by_time():
     headers = headers1 + release_info[0]
     index = 1
 
-    if os.path.exists(release_file):
-        return wtx.get_from_xls(release_file),tag_res
 
     for i in all_bug_info:
         while to.compare_time(i[-1],release_info[index][-1]) and index < len(release_info)-1:
@@ -50,11 +48,13 @@ def split_bug_to_release_by_time():
         res.append(i+release_info[index-1])
         print(i+release_info[index-1])
     wtx.save_as_csv(headers,res,c.res_path + "/res/2_3_2_bugs_split_by_release.csv")
+    if os.path.exists(release_file):
+        return wtx.get_from_xls(release_file),tag_res
     return res,tag_res
 
 
 def split_by_release_main_func():
-    res ,release_info=split_bug_to_release_by_time()
+    res ,release_info = split_bug_to_release_by_time()
     return release_info
 
 

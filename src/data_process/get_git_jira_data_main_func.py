@@ -30,7 +30,7 @@ def main_func():
     now_last_file_path = res_file_path+'/res/'+now_last_file_name+'.xls'
 
     # 获取初始数据
-    gdm.get_data()
+    # gdm.get_data()
     # #### ############################################
     # 过滤非java文件
     file_data = wtx.get_from_xls(commit_id_file)
@@ -69,7 +69,7 @@ def main_func():
         ggbl.get_generic_bug_lines(add_del_lines_list,path,generic_bug_line_path,commit_id_file)
     else:
         print("file "+generic_bug_line_file+" is already exists")
-    generic_bug_lines = wtx.get_from_csv(generic_bug_line_path)
+    # generic_bug_lines = wtx.get_from_csv(generic_bug_line_path)
 
     # commit_dict_withoutNone = gci.get_commit_id(commit_id_file,8,False)
     commit_dict_withoutNone = gci.get_commit_id(commit_id_file,8)
@@ -77,9 +77,9 @@ def main_func():
     #####################################################################
     # 讲代码分开分成表格中的一行对应一个带吗行
     ggbl.split_show_to_every_lines(add_del_lines_file,every_line_file_path)
-    # #####################################################################
-    # 获取遗漏的行
-    commit_dict = gci.get_commit_id(commit_id_file,8,True)
+    # # #####################################################################
+    # # 获取遗漏的行
+    # commit_dict = gci.get_commit_id(commit_id_file,8,True)
     # cf.fix_lost_code_main(every_line_file_path,3,generic_bug_line_path,2,now_last_file_path,commit_dict,path)
     ###################################################################
     # 验证结果

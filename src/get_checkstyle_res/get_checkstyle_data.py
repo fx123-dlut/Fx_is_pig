@@ -85,6 +85,8 @@ def get_code_from_csv():
         headers = data[0]+['code'] if len(data[0]) == 5 else data[0]
         data = data[1:]
         for line in data:
+            sys.stdout.write("\r" + ";   now position is :"+str(data.index(line))+'/'+str(len(data)))
+            sys.stdout.flush()
             if len(line) == 6:
                 continue
             try:
@@ -102,7 +104,10 @@ def use_self_remark_checkstyle_res():
     release_path = c.res_path+'/init_data/git_release_version_with_commitid.xls'
     release_data = wtx.get_from_xls(release_path)
     for i in range(3,len(release_data)-1):
-        print("checkstyle: now diff use version is : "+release_data[i][0]+'.'+file_type)
+        if os.path.exists(c.res_path + '/projs/' + c.pro_name + '/checkstyle_res/diff_res/'+release_data[i][0]+'.'+file_type):
+            print(c.res_path + '/projs/' + c.pro_name + '/checkstyle_res/diff_res/'+release_data[i][0]+'.'+file_type+ " is already exist !!! ")
+            continue
+        print("loc is "+str(i)+"/"+str(len(release_data))+"  checkstyle: now diff use version is : "+release_data[i][0]+'.'+file_type)
         try:
             old_data = wtx.get_from_file(csv_res+release_data[i][0]+'.'+file_type,file_type)
             new_data = wtx.get_from_file(csv_res+release_data[i+1][0]+'.'+file_type,file_type,1)
@@ -116,7 +121,7 @@ def use_self_remark_checkstyle_res():
         file_index = headers.index('file')
         code_index = headers.index('code')
         for n in range(len(new_data)):
-            sys.stdout.write("\r" + "now analyse pmd diff position is :"+str(n)+'/'+str(len(new_data)))
+            sys.stdout.write("\r" + "now analyse checkstyle diff position is :"+str(n)+'/'+str(len(new_data)))
             sys.stdout.flush()
             for j in range(len(old_data)):
                 if new_data[n][file_index].split('src')[-1] == old_data[j][file_index].split('src')[-1] \
@@ -134,8 +139,8 @@ def get_checkstyle_data_main_func():
     init_folder()
     # get_cs_init_data()
     # from_cs_xml_to_csv()
-    get_code_from_csv()
-    mcr.mark_cs_res_by_git()
+    # get_code_from_csv()
+    # mcr.mark_cs_res_by_git()
     use_self_remark_checkstyle_res()
 
 

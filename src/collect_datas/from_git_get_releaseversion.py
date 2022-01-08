@@ -42,10 +42,10 @@ def get_all_tag_with_commitid(path):
                 res.append([i,comid,date])
                 times.append(date)
                 break
-    print(len(res))
+    # print(len(res))
     wtx.save_to_init_xls(headers,res,c.pro_name,'git_release_without_sort')
     res = sort_by_time(res,-1,times)
-    print(len(res))
+    # print(len(res))
     res.reverse()
     print(res)
     wtx.save_to_init_xls(headers,res,c.pro_name,release_file)
@@ -53,7 +53,7 @@ def get_all_tag_with_commitid(path):
 
 
 def sort_by_time(list,index,date):
-    print(date)
+    # print(date)
     date_list = to.get_sort_res(date)
     res = []
     tag = [0 for i in range(len(list))]
@@ -76,7 +76,7 @@ def get_release_all_info(re_write = 1):
     # print(all_release_commit_id)
     all_commit_id = wtx.get_from_xls(all_commit_path)
     for i in all_release_commit_id:
-        for j in all_commit_id:
+        for j in all_commit_id :
             if i[1] == j[1]:
                 print(i[1] + " " + j[1])
                 res.append([i[0]]+j)

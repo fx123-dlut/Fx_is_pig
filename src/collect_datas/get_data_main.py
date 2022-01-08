@@ -13,7 +13,7 @@ def get_data():
     if not os.path.exists(c.res_path+'/res'):
         os.mkdir(c.res_path+'/res')
     fggi.get_log_info()
-    fwgjd.get_jira_info()
+    # fwgjd.get_jira_info()
     cjg.combine_git_jira()
 
 
