@@ -137,10 +137,10 @@ def use_self_remark_checkstyle_res():
 # 主流程函数
 def get_checkstyle_data_main_func():
     init_folder()
-    # get_cs_init_data()
-    # from_cs_xml_to_csv()
-    # get_code_from_csv()
-    # mcr.mark_cs_res_by_git()
+    get_cs_init_data()
+    from_cs_xml_to_csv()
+    get_code_from_csv()
+    mcr.mark_cs_res_by_git()
     use_self_remark_checkstyle_res()
 
 

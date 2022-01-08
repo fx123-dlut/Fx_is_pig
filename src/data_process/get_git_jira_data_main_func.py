@@ -30,7 +30,7 @@ def main_func():
     now_last_file_path = res_file_path+'/res/'+now_last_file_name+'.xls'
 
     # 获取初始数据
-    # gdm.get_data()
+    gdm.get_data()
     # #### ############################################
     # 过滤非java文件
     file_data = wtx.get_from_xls(commit_id_file)
