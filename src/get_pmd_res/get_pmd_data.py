@@ -74,23 +74,27 @@ def remove_same_line():
     files = os.listdir(csv_path)
     res_path = c.res_path+'/projs/'+c.pro_name+'/pmd_res/reduced_data/'
     for i in files:
-        print('removing the same line in files : '+i)
-        data = wtx.get_from_csv(csv_path+i)
-        headers = data[0]
-        file_col = headers.index('File')
-        line_col = headers.index('Line')
-        pre = data[1]
-        res = [data[1]]
-        if os.path.exists(res_path+i):
-            print("pmd: "+ res_path+i + " already exists!")
-            continue
-        for j in data[2:]:
-            if (pre[file_col] == j[file_col] and pre[line_col] == j[line_col]) or isTargetorTest(pre[file_col]):
+        try:
+            print('removing the same line in files : '+i)
+            data = wtx.get_from_csv(csv_path+i)
+            headers = data[0]
+            file_col = headers.index('File')
+            line_col = headers.index('Line')
+            pre = data[1]
+            res = [data[1]]
+            if os.path.exists(res_path+i):
+                print("pmd: "+ res_path+i + " already exists!")
                 continue
-            else:
-                pre = j
-                res.append(j)
-        wtx.save_as_csv(data[0],res,res_path+i)
+            for j in data[2:]:
+                if (pre[file_col] == j[file_col] and pre[line_col] == j[line_col]) or isTargetorTest(pre[file_col]):
+                    continue
+                else:
+                    pre = j
+                    res.append(j)
+            wtx.save_as_csv(data[0],res,res_path+i)
+        except IndexError as E:
+            print(repr(E))
+            continue
 
 
 def isTargetorTest(s):
@@ -174,8 +178,17 @@ def use_self_remark_pmd_res():
     release_path = c.res_path+'/init_data/git_release_version_with_commitid.xls'
     release_data = wtx.get_from_xls(release_path)
     for i in range(len(release_data)-1):
-        old_data = wtx.get_from_file(reduced_path+release_data[i][0]+'.'+file_type,file_type)
-        new_data = wtx.get_from_file(reduced_path+release_data[i+1][0]+'.'+file_type,file_type,1)
+        try:
+            old_data = wtx.get_from_file(reduced_path+release_data[i][0]+'.'+file_type,file_type)
+        except FileNotFoundError:
+            continue
+        try:
+            new_data = wtx.get_from_file(reduced_path+release_data[i+1][0]+'.'+file_type,file_type,1)
+        except FileNotFoundError:
+            index = i + 1
+            while (not os.path.exists(reduced_path+release_data[index][0]+'.'+file_type)) and index < len(release_data):
+                index = index + 1
+            new_data = wtx.get_from_file(reduced_path + release_data[index][0] + '.' + file_type, file_type, 1)
         print("\npmd: now diff use version is : " + release_data[i][0] + '.' + file_type + "; now diff version is : " +
               release_data[i + 1][0] + '.' + file_type)
 
@@ -200,7 +213,7 @@ def use_self_remark_pmd_res():
                     else:
                         new_data[n] = new_data[n]+['true']
                     break
-        wtx.save_as_csv(headers,new_data,c.res_path + '/projs/' + c.pro_name + '/pmd_res/diff_data/'+release_data[i+1][0]+'.'+file_type)
+        wtx.save_as_csv(headers,new_data,c.res_path + '/projs/' + c.pro_name + '/pmd_res/diff_data/'+release_data[i+1][0].split('/')[-1]+'.'+file_type)
 
 
 def get_pmd_res_main_func():
