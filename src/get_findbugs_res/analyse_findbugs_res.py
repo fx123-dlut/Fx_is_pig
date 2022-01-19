@@ -62,7 +62,8 @@ def auto_compare_xls_by_filename(release_list):
     for i in range(len(all_file_names)-1):
         old_file_name = src_path+all_file_names[i]+'.xls'
         new_file_name = src_path+all_file_names[i+1]+'.xls'
-        file_name = all_file_names[i].split('.xls')[0]+"_"+all_file_names[i+1].split('.xls')[0]
+        # file_name = all_file_names[i].split('.xls')[0]+"@"+all_file_names[i+1].split('.xls')[0]
+        file_name = all_file_names[i+1].split('.xls')[0]
         res_file = res_path+file_name
         print("old : "+old_file_name)
         print("new : "+new_file_name)
@@ -70,7 +71,7 @@ def auto_compare_xls_by_filename(release_list):
         res = []
         old_data = wtx.get_from_xls(old_file_name,0)
         new_data = wtx.get_from_xls(new_file_name)
-        headers = old_data[0]+['status']
+        headers = old_data[0]+['diff status']
 
         for old_rownum in old_data[1:]:
             flag = 1

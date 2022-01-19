@@ -77,7 +77,7 @@ def get_release_all_info(re_write = 1):
     all_commit_id = wtx.get_from_xls(all_commit_path)
     for i in all_release_commit_id:
         for j in all_commit_id :
-            if i[1] == j[1]:
+            if i[1] == j[0]:
                 print(i[1] + " " + j[1])
                 res.append([i[0]]+j)
                 break

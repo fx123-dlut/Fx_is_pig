@@ -6,6 +6,11 @@ pro_name = 'maven-dependency-plugin'
 jira_name = 'MDEP'
 # jira上版本数量
 max_jira = 780
+
+
+
+
+
 # jira项目路径
 base_url = 'https://issues.apache.org/jira/browse/'+jira_name+'-'
 # base_url = 'https://issues.apache.org/jira/browse/TIKA-'
