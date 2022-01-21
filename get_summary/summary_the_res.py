@@ -1,6 +1,7 @@
 import src.tools.write_to_xls as wtx
 import os
 import configure as c
+import src.tools.time_operator as to
 
 
 # 从文件获取数据，消除csv和xls文件的影响
@@ -33,7 +34,7 @@ def get_all_release_info(path):
     data = wtx.get_from_xls(file_path)
     res = []
     for i in data:
-        res.append([i[0].split('/')[-1]])
+        res.append([i[0].split('/')[-1],i[2]])
     return res
 
 
@@ -188,7 +189,7 @@ def get_findbugs_res(path,rel_map,tool_path,tool_name):
 # 将结果保存到文件中
 def save_to_csv(res,pro_names):
     body = []
-    headers = ['pro_name','release name','pmd git compared sum','pmd self compared sum','pmd all sum',
+    headers = ['pro_name','release name','bug num','pmd git compared sum','pmd self compared sum','pmd all sum',
                'checkstyle git compared sum', 'checkstyle self compared sum', 'checkstyle all sum',
                'findbugs git compared sum', 'findbugs self compared sum', 'findbugs all sum']
     for i in res:
@@ -197,6 +198,7 @@ def save_to_csv(res,pro_names):
             now_res = [k]
             data = i.get(k)
             tools_name = data.keys()
+            now_res.append(data.get('bug_num'))
             if 'pmd' in tools_name:
                 now_res += data.get('pmd')
             else:
@@ -213,11 +215,36 @@ def save_to_csv(res,pro_names):
     wtx.save_as_csv(headers,body,c.res_path.split(c.pro_name)[0]+'summary_datas.csv')
 
 
+def get_bugs_nums(root_path,rel_map,releases):
+    pro_root_path = root_path.split('/projs/')[0]
+    commit_path = pro_root_path + '/init_data/git_log_info.xls'
+    commit_data = get_data(commit_path)
+    cnt = 0
+    index = 0
+    now_release_version = releases[index][0]
+    temp = rel_map.get(now_release_version)
+    for i in commit_data[1:]:
+        commit_time = i[1]
+        cnt += 1
+        if not to.compare_time(releases[index][1],commit_time):
+            temp.setdefault('bug_num',cnt)
+            rel_map.update({now_release_version: temp})
+            cnt = 0
+            index += 1
+            if index >= len(releases):
+                break
+            now_release_version = releases[index][0]
+            temp = rel_map.get(now_release_version)
+    print(pro_root_path)
+
+
 # 获取单个项目的具体信息
 def get_datas_from_tool_res(path,releases):
     rel_map = {}
     for i in releases:
         rel_map.setdefault(i[0],{})
+    get_bugs_nums(path,rel_map,releases)
+    print(rel_map)
     get_tools_res(path,rel_map,'/pmd_res/diff_data/','pmd')
     get_tools_res(path,rel_map,'/checkstyle_res/diff_res/','checkstyle')
     get_findbugs_res(path,rel_map,'/findbugs_res/compared/','findbugs')

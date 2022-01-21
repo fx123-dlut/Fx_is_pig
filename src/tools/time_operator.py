@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-# time1早于time2返回false
+# time1早于time2返回false(建议希望早的时间放前面，满足会返回true)
 def compare_time(time1, time2):
     time1 = time1.split('+')[0].split('-')[0].strip()
     time2 = time2.split('+')[0].split('-')[0].strip()
@@ -20,6 +20,7 @@ def get_sort_res(arr):
 
 if __name__ == "__main__":
     # arr = ['Fri Jan 20 08:22:32 2006 +0000','Fri Jan 20 08:22:31 2006 +0000']
-    arr = ['Fri Jan 20 08:22:20 2006 +0000','Fri Jan 20 08:22:31 2006 +0000','Fri Jan 20 08:21:31 2006 +0000','Thu Jan 19 08:22:31 2006 +0000']
+    arr = ['Fri Jan 20 08:22:20 2006 +0000','Fri Jan 20 08:22:31 2007 +0000','Fri Jan 20 08:21:31 2006 +0000','Thu Jan 19 08:22:31 2006 +0000']
     list = get_sort_res(arr)
+    print(compare_time(arr[0],arr[1]))
     print(list)
