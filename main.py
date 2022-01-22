@@ -4,7 +4,7 @@ import src.get_checkstyle_res.get_checkstyle_data as gcd
 import src.get_pmd_res.get_pmd_data as gpd
 
 
-if __name__ == "__main__":
+def main():
     # 获取github上的漏洞信息
     ggjdmf.main_func()
     # 获取find0bugs的漏洞信息并获取相关代码段
@@ -14,3 +14,7 @@ if __name__ == "__main__":
     gpd.get_pmd_res_main_func()
     # 获取checkstyle并进行分析
     gcd.get_checkstyle_data_main_func()
+
+
+if __name__ == "__main__":
+    main()

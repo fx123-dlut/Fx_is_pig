@@ -9,7 +9,7 @@ import os
 
 
 # ******主流程函数******
-def main_func():
+def main_func(rewrite = False):
     path = c.path
     res_file_path = c.res_path
     commit_id_file = res_file_path+'/res/combine.xls'
@@ -42,7 +42,7 @@ def main_func():
     # ###############################################
     # 过滤java文件中的注释
     no_anno_headers = ['commit id', 'file names', 'before', 'after']
-    if (os.path.exists(no_anno_file_path) == False):
+    if rewrite or (os.path.exists(no_anno_file_path) == False):
         no_anno = f.filter_annotation(nmtn_changed_file,path)
         wtx.save_to_xls(no_anno_headers,no_anno,'test1',no_anno_file_name)
 
@@ -50,7 +50,7 @@ def main_func():
     # 获取更新后符合要求的版本信息
     final_version_list = cf.combine_file1_file2(no_anno_file_path,0,6,only_bug_version_path,0,6,3,4)
     print('after filter , the final version list\'s length : '+str(len(final_version_list)))
-    if (os.path.exists(combine_1gobv_1naf_path) == False):
+    if rewrite or (os.path.exists(combine_1gobv_1naf_path) == False):
         wtx.save_to_xls(final_version_list[0],final_version_list[1:],'res',combine_1gobv_1naf_name)
     else:
         print("file "+combine_1gobv_1naf_name+" is already exists")
@@ -58,7 +58,7 @@ def main_func():
     res_no_anno = wtx.get_from_xls(combine_1gobv_1naf_path)
     commit_dict = gci.get_commit_id(commit_id_file,6,True)
     # 获取修改行
-    if(os.path.exists(add_del_lines_path) == False):
+    if rewrite or (os.path.exists(add_del_lines_path) == False):
         add_del_lines = ggbl.get_del_add_line(res_no_anno,add_del_lines_file,path,commit_dict)
     else:
         print("file "+add_del_lines_file+" is already exists")
@@ -66,7 +66,7 @@ def main_func():
     # 获取generic-bug-fix-line
     add_del_lines_list = wtx.get_from_csv(add_del_lines_path)
     # print(add_del_lines_list)
-    if not os.path.exists(generic_bug_line_path):
+    if rewrite or not os.path.exists(generic_bug_line_path):
         ggbl.get_generic_bug_lines(add_del_lines_list,path,generic_bug_line_path,commit_id_file)
     else:
         print("file "+generic_bug_line_file+" is already exists")

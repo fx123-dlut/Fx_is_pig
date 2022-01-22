@@ -28,7 +28,6 @@ def mark_tp_findbugs_line_by_res():
     res_headers=[]
     while index < len(generate_bug_lines):
         try:
-            print('12123')
             i = generate_bug_lines[index]
             version = i[headers.index('release version')]
             git_mark_res = []

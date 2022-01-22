@@ -215,6 +215,7 @@ def save_to_csv(res,pro_names):
     wtx.save_as_csv(headers,body,c.res_path.split(c.pro_name)[0]+'summary_datas.csv')
 
 
+# 获取每个release对应的bugfix版本的commit数量
 def get_bugs_nums(root_path,rel_map,releases):
     pro_root_path = root_path.split('/projs/')[0]
     commit_path = pro_root_path + '/res/1_get_only_bug_version_all_match.xls'
