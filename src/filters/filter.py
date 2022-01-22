@@ -26,7 +26,7 @@ def filter_more_than_n_version(first_commit_id,file_data,path,only_java=True,max
                 print(this_res[0])
                 this_res.append(res)
                 this_res.append(numl)
-                this_data = exist_data(file_data,this_res[0][0:8],8)
+                this_data = exist_data(file_data,this_res[0][0:6],6)
                 if(this_data!= []):
                     ret.append(this_res)
                     data_ret.append(this_data)
@@ -48,8 +48,6 @@ def filter_annotation(cid_file_list, path):
             # print(file_list)
             changed_num = 0
             flag = 0
-            add_line = ''
-            del_line = ''
             change_file = ''
             for j in file_list:
                 command = 'git show ' + i[0] + " -U0 -- " + j
@@ -60,11 +58,11 @@ def filter_annotation(cid_file_list, path):
                     # print(x)
                     if (x != '' and ((x[0] == '-' and len(x)>1 and x[1]!='-') or x.startswith('-\t')) and is_annotation(x) == False):
                         flag = 1
-                        del_line = del_line + '*@*' + x
+                        break
                         # print(x)
                     if (x != '' and ((x[0] == '+' and len(x)>1 and x[1]!='+') or x.startswith('+\t')) and is_annotation(x) == False):
                         flag = 1
-                        add_line = add_line + '*@*' + x
+                        break
                         # print(x)
                 if (flag == 1):
                     changed_num = changed_num + 1
@@ -75,8 +73,6 @@ def filter_annotation(cid_file_list, path):
             this_res = i
             this_res[1] = change_file
             this_res.append(changed_num)
-            # this_res.append(add_line)
-            # this_res.append(del_line)
             ret.append(this_res)
         # print('yes')
         return ret

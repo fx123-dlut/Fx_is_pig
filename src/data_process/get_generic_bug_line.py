@@ -42,15 +42,15 @@ def get_del_add_line(no_anno_list,add_del_lines_file,path,commit_dict):
     return ret
 
 # 获取genericbugfixlines，详细见文档
-def get_generic_bug_lines(add_del_lines_list,path,res_file,commit_file):
+def get_generic_bug_lines(add_del_lines_list,path,res_file,commit_file,commit_id_len = 6):
     ret = []
     ct.change_path_to_target(path)
     # commit_v = glv.get_commit_id(commit_file,8,False)
-    commit_v = glv.get_commit_id(commit_file,8)
+    commit_v = glv.get_commit_id(commit_file,commit_id_len)
     keys = list(commit_v.keys())
     for i in add_del_lines_list[1:]:
         print(i[0])
-        v = commit_v.get(i[0][0:8])
+        v = commit_v.get(i[0][0:commit_id_len])
         # print(commit_v)
         end_version = keys[v+1]
         print("now_V:"+i[0] + " end_v:"+ end_version)
@@ -58,20 +58,20 @@ def get_generic_bug_lines(add_del_lines_list,path,res_file,commit_file):
         print(check_out_command)
         ct.run_command('git stash')
         ct.run_command(check_out_command)
-        sleep(10)
-        for num in range(0,int(i[1].split('.')[0])):
+        # sleep(5)
+        for num in range(0,min(int(i[1].split('.')[0]),8)):
             col = i[4+num*2]
             file_and_del = col.split('*@*')
             blame_command = 'git blame -s -f '+file_and_del[0]
             print(blame_command)
             cmd_blame_res = ct.run_command(blame_command)
-            cid_code = get_version_code(cmd_blame_res)
+            cid_code = get_version_code(cmd_blame_res,6)
             # print(cid_code)
             ret = ret + get_start_v_list(cid_code,file_and_del[1:],end_version,file_and_del[0],commit_v,i[0],v)
     wtx.save_as_csv(generic_bug_line_headers,ret,res_file)
     return ret
 
-def get_start_v_list(blame_lines,fix_lines,end_v,file_name,commit_v,now_cid,now_v):
+def get_start_v_list(blame_lines,fix_lines,end_v,file_name,commit_v,now_cid,now_v,commit_id_len = 6):
     ret = []
     counter = 0
     for i in fix_lines:
@@ -85,7 +85,7 @@ def get_start_v_list(blame_lines,fix_lines,end_v,file_name,commit_v,now_cid,now_
                 # print(end_v)
                 # print(j[0])
                 try:
-                    ret.append([file_name,j[2],j[1],j[0],commit_v.get(j[0])+1,end_v,commit_v.get(end_v)+1,now_cid,now_v+1])
+                    ret.append([file_name,j[2],j[1],j[0],commit_v.get(j[0][0:commit_id_len])+1,end_v,commit_v.get(end_v)+1,now_cid,now_v+1])
                 except Exception as e:
                     print(repr(e))
                 break

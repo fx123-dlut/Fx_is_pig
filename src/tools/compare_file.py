@@ -10,9 +10,9 @@ def combine_file1_file2(file1,col1,len1,file2,col2,len2,num_loc,max_changed):
     data1 = wtx.get_from_xls(file1,0)
     data2 = wtx.get_from_xls(file2,0)
     ret.append(data1[0]+ data2[0])
-    for i in data1[0:]:
+    for i in data1[1:]:
         # print(i)
-        for j in data2[0:]:
+        for j in data2[1:]:
             if(i[col1][0:len1] == j[col2][0:len2] and int(i[num_loc])<=max_changed and int(i[num_loc])>0):
                 ret.append(i+j)
     return ret

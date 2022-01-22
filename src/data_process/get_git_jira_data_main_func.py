@@ -30,7 +30,8 @@ def main_func():
     now_last_file_path = res_file_path+'/res/'+now_last_file_name+'.xls'
 
     # 获取初始数据
-    # gdm.get_data()
+    if not os.path.exists(res_file_path+"/res/1_get_only_bug_version.xls"):
+        gdm.get_data()
     # #### ############################################
     # 过滤非java文件
     file_data = wtx.get_from_xls(commit_id_file)
@@ -47,7 +48,7 @@ def main_func():
 
     # ############################################
     # 获取更新后符合要求的版本信息
-    final_version_list = cf.combine_file1_file2(no_anno_file_path,0,8,only_bug_version_path,0,8,3,4)
+    final_version_list = cf.combine_file1_file2(no_anno_file_path,0,6,only_bug_version_path,0,6,3,4)
     print('after filter , the final version list\'s length : '+str(len(final_version_list)))
     if (os.path.exists(combine_1gobv_1naf_path) == False):
         wtx.save_to_xls(final_version_list[0],final_version_list[1:],'res',combine_1gobv_1naf_name)
@@ -55,7 +56,7 @@ def main_func():
         print("file "+combine_1gobv_1naf_name+" is already exists")
     # ################################################################
     res_no_anno = wtx.get_from_xls(combine_1gobv_1naf_path)
-    commit_dict = gci.get_commit_id(commit_id_file,8,True)
+    commit_dict = gci.get_commit_id(commit_id_file,6,True)
     # 获取修改行
     if(os.path.exists(add_del_lines_path) == False):
         add_del_lines = ggbl.get_del_add_line(res_no_anno,add_del_lines_file,path,commit_dict)
