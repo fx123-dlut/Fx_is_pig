@@ -132,7 +132,7 @@ def get_tools_res(path,rel_map,tool_path,tool_name):
         all = len(datas)-1
         if all < 0:
             all = 0
-        temp.setdefault(tool_name,[git_num,diff_num,all])
+        temp.setdefault(tool_name,[git_num,all-diff_num,all])
         rel_map.update({file_rel:temp})
 
 
@@ -178,7 +178,7 @@ def get_findbugs_res(path,rel_map,tool_path,tool_name):
         if all < 0:
             all = 0
         try:
-            temp.setdefault(tool_name, [git_num, diff_num, all])
+            temp.setdefault(tool_name, [git_num, all-diff_num, all])
         except AttributeError as e:
             print(path+ " " + i)
             print(repr(e))
