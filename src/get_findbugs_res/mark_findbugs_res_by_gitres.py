@@ -7,8 +7,8 @@ def get_target_compared_file(version):
     compare_path = c.res_path + 'projs/'+c.pro_name+'/findbugs_res/compared/'
     compare_files = os.listdir(compare_path)
     for i in compare_files:
-        if i.split('_')[0].find(version) >= 0:
-            print(compare_path + i, compare_path)
+        if i.find(version) > 0:
+            # print(compare_path + i, compare_path)
             return compare_path + i,compare_path
     return None,None
 
@@ -23,7 +23,7 @@ def mark_tp_findbugs_line_by_res():
     generate_bug_line_path = root_path+'res/2_3_2_bugs_split_by_release.csv'
     generate_bug_lines = wtx.get_from_csv(generate_bug_line_path)
     headers = generate_bug_lines[0]
-    old_version = ''
+    old_version = '#'
     index = 1
     res_headers=[]
     while index < len(generate_bug_lines):
@@ -38,7 +38,7 @@ def mark_tp_findbugs_line_by_res():
                 compare_path,compare_root_path = get_target_compared_file(version)
                 if compare_path is None:
                     continue
-                print(compare_path)
+                # print(compare_path)
                 compare_data = wtx.get_from_xls(compare_path,0)
                 compare_headers = compare_data[0]
                 # print(compare_headers)
@@ -53,17 +53,17 @@ def mark_tp_findbugs_line_by_res():
                 git_code = generate_bug_lines[index][headers.index('code')]
                 for i in git_mark_res:
                     if i[compare_data[0].index('codes')].find(git_code) >= 0 \
-                            and i[compare_data[0].index('file_path')] == generate_bug_lines[index][headers.index('file')]:
+                            and i[compare_data[0].index('file_path')] in generate_bug_lines[index][headers.index('file')]:
                         i[-1] = 'true'
+                        print(git_code)
                 index = index + 1
                 if index >= len(generate_bug_lines):
                     break
                 version = generate_bug_lines[index][headers.index('release version')]
-            print(res_headers)
             wtx.save_to_targetpath_xls(res_headers,git_mark_res,c.pro_name,compare_path.split('compared/')[1].split('.xls')[0],compare_root_path)
             index = index + 1
         except Exception as e:
-            print(repr(e))
+            # print(repr(e))
             continue
 
 

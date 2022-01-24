@@ -112,19 +112,21 @@ def use_git_remark_pmd_res():
     has_used = []
 
     red_fils = os.listdir(reduced_path)
+    red_fils.reverse()
     for file in red_fils:
-        this_version = file.split(c.pro_name+'-',maxsplit=1)[-1].split('.csv')[0]
+        this_version = file #.split(c.pro_name+'-',maxsplit=1)[-1].split('.csv')[0]
         pmd_res = wtx.get_from_csv(reduced_path+file)
-        if headers[-1] !='git status':
+        if pmd_res[0][-1] != 'git status':
             this_headers = pmd_res[0]+['git status']
         else:
             this_headers = pmd_res[0]
         print('now analyse pmd  file is : '+file)
         for fix_line in git_res:
             # print(fix_line)
-            if fix_line[fix_version_col] == this_version:
+            if fix_line[fix_version_col] in this_version:
                 for pmd_line in pmd_res[1:]:
-                    if pmd_line[pmd_res[0].index('File')].replace('\\','/').find(fix_line[fix_file_col])>0 \
+                    pmd_file_name = pmd_line[pmd_res[0].index('File')].replace('\\','/')
+                    if pmd_file_name.find(fix_line[fix_file_col])>0 \
                             and fix_line[fix_code_col].strip() == pmd_line[pmd_res[0].index('code')].strip():
                         has_used.append(git_res.index(fix_line))
                         if pmd_line[-1] != 'true':

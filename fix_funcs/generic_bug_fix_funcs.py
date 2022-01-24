@@ -31,7 +31,7 @@ def fix_old_version_genericbugline():
 # 根据data目录里面的项目，修改configure文件，并对每个项目进行对应的操作
 def auto_fix_exist_pro():
     pro_names = get_exist_data()
-    for name in pro_names[7:]:
+    for name in pro_names:
         print('now fix project name is '+ name +"; now position is "+str(pro_names.index(name))+"/"+str(len(pro_names)))
         c.pro_name = name
         c.res_path = c.base_res_path+name+"/"

@@ -13,14 +13,18 @@ def mark_cs_res_by_git():
 
     reduced_path = c.res_path + '/projs/' + c.pro_name + '/checkstyle_res/csv_res/'
     cs_files = os.listdir(reduced_path)
+    cs_files.reverse()
     for file in cs_files:
-        this_version = file.split(c.pro_name + '-', maxsplit=1)[-1].split('.csv')[0]
+        this_version = file #.split(c.pro_name + '-', maxsplit=1)[-1].split('.csv')[0]
         cs_res = wtx.get_from_csv(reduced_path+file)
-        this_headers = cs_res[0] + ['git status']
+        if cs_res[0][-1] != 'git status':
+            this_headers = cs_res[0]+['git status']
+        else:
+            this_headers = cs_res[0]
         cs_res = cs_res[1:]
         print('now analyse checkstyle file is : '+file)
         for fix_line in git_res:
-            if fix_line[fix_version_col] == this_version:
+            if fix_line[fix_version_col] in this_version:
                 for cs_line in cs_res[1:]:
                     if cs_line[this_headers[0].index('file')].replace('\\', '/').find(fix_line[fix_file_col]) > 0 \
                             and fix_line[fix_code_col].strip() == cs_line[this_headers.index('code')].strip():

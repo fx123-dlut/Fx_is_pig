@@ -17,7 +17,7 @@ def get_every_bug_time(re_write = 0):
         return wtx.get_from_csv(c.res_path + "/res/2_3_1_oneline_onebug_more_detail.csv")[1:],headers
     for i in all_init_bugs_data[1:]:
         for j in all_commit_id_data[1:]:
-            if i[0][0:8] == j[0][0:8]:
+            if i[0][0:6] == j[0][0:6]:
                 this_res = i+j[0:2]
                 # print(this_res)
                 res.append(this_res)
@@ -40,13 +40,13 @@ def split_bug_to_release_by_time():
 
 
     for i in all_bug_info:
-        while to.compare_time(i[-1],release_info[index][-1]) and index < len(release_info)-1:
+        while index < len(release_info) and to.compare_time(i[-1],release_info[index][-1]) :
             index = index + 1
-        if index == 1:
+        if index == len(release_info):
             res.append(i+['','',''])
             continue
-        res.append(i+release_info[index-1])
-        print(i+release_info[index-1])
+        res.append(i+release_info[index])
+        print(i+release_info[index])
     wtx.save_as_csv(headers,res,c.res_path + "/res/2_3_2_bugs_split_by_release.csv")
     if os.path.exists(release_file):
         return wtx.get_from_xls(release_file),tag_res
