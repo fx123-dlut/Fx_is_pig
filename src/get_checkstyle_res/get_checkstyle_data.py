@@ -98,13 +98,13 @@ def get_code_from_csv():
 
 
 # diff标记，用后一个版本标记前一个版本
-def use_self_remark_checkstyle_res():
+def use_self_remark_checkstyle_res(rewrite = False):
     csv_res = c.res_path + '/projs/' + c.pro_name + '/checkstyle_res/csv_res/'
     file_type = os.listdir(csv_res)[0].split('.')[-1]
     release_path = c.res_path+'/init_data/git_release_version_with_commitid.xls'
     release_data = wtx.get_from_xls(release_path)
     for i in range(3,len(release_data)-1):
-        if os.path.exists(c.res_path + '/projs/' + c.pro_name + '/checkstyle_res/diff_res/'+release_data[i][0]+'.'+file_type):
+        if (not rewrite) and os.path.exists(c.res_path + '/projs/' + c.pro_name + '/checkstyle_res/diff_res/'+release_data[i][0]+'.'+file_type):
             print(c.res_path + '/projs/' + c.pro_name + '/checkstyle_res/diff_res/'+release_data[i][0]+'.'+file_type+ " is already exist !!! ")
             continue
         print("loc is "+str(i)+"/"+str(len(release_data))+"  checkstyle: now diff use version is : "+release_data[i][0]+'.'+file_type)
@@ -126,7 +126,7 @@ def use_self_remark_checkstyle_res():
             for j in range(len(old_data)):
                 if new_data[n][file_index].split('src')[-1] == old_data[j][file_index].split('src')[-1] \
                         and new_data[n][code_index].strip() == old_data[j][code_index].strip():
-                    if len(new_data)+1 != len(headers):
+                    if len(new_data[n])+1 != len(headers):
                         new_data[n] = new_data[n]+['','true']
                     else:
                         new_data[n] = new_data[n]+['true']

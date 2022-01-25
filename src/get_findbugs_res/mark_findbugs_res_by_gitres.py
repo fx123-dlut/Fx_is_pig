@@ -7,7 +7,8 @@ def get_target_compared_file(version):
     compare_path = c.res_path + 'projs/'+c.pro_name+'/findbugs_res/compared/'
     compare_files = os.listdir(compare_path)
     for i in compare_files:
-        if i.find(version) > 0:
+        this_v = i.split('.csv')[0].split('.xls')[0]
+        if i.find(version) > 0 or this_v == version:
             # print(compare_path + i, compare_path)
             return compare_path + i,compare_path
     return None,None

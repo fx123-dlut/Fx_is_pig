@@ -132,7 +132,7 @@ def get_tools_res(path,rel_map,tool_path,tool_name):
         all = len(datas)-1
         if all < 0:
             all = 0
-        temp.setdefault(tool_name,[git_num,all-diff_num,all])
+        temp.setdefault(tool_name,[all-git_num,all-diff_num,all])
         rel_map.update({file_rel:temp})
 
 
@@ -178,7 +178,7 @@ def get_findbugs_res(path,rel_map,tool_path,tool_name):
         if all < 0:
             all = 0
         try:
-            temp.setdefault(tool_name, [git_num, all-diff_num, all])
+            temp.setdefault(tool_name, [all-git_num, all-diff_num, all])
         except AttributeError as e:
             print(path+ " " + i)
             print(repr(e))
@@ -245,10 +245,10 @@ def get_datas_from_tool_res(path,releases):
     for i in releases:
         rel_map.setdefault(i[0],{})
     get_bugs_nums(path,rel_map,releases)
-    print(rel_map)
     get_tools_res(path,rel_map,'/pmd_res/diff_data/','pmd')
     get_tools_res(path,rel_map,'/checkstyle_res/diff_res/','checkstyle')
     get_findbugs_res(path,rel_map,'/findbugs_res/compared/','findbugs')
+    print(rel_map)
     return rel_map
 
 
@@ -270,10 +270,21 @@ def get_all_data(path):
     save_to_csv(res,folders)
 
 
+def test_summary():
+    res = []
+    now_path = 'G:\\fx\\data\\maven-dependency-plugin\\'
+    path = 'G:\\fx\\data\\maven-dependency-plugin\\projs\\maven-dependency-plugin/'
+    releases = get_all_release_info(now_path)
+    res.append(get_datas_from_tool_res(path,releases))
+    save_to_csv(res,['maven-dependency-plugin'])
+
+
 def test():
-    data = get_data('G:/fx/data/reef/projs/reef/checkstyle_res/diff_res/reef-project-0.10.0-incubating.csv')
+    data = get_data('G:/fx/data/maven-dependency-plugin/projs/maven-dependency-plugin/checkstyle_res/csv_res/maven-dependency-plugin-3.1.1.csv')
     for i in data:
-        print(i[-2])
+        if i[-1] != 'true':
+            continue
+        print(i[-1])
 
 
 if __name__=="__main__":
@@ -284,5 +295,5 @@ if __name__=="__main__":
     # get_summary(path,tools_folder)
     # get_git_res_by_release()
 
-    get_all_data(path)
-    # test()
+    # get_all_data(path)
+    test()

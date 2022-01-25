@@ -69,7 +69,7 @@ def get_code_from_csv():
 
 
 # 移除pmd中相同的行（文件名代码行相同）
-def remove_same_line():
+def remove_same_line(rewrite = False):
     csv_path = c.res_path+'/projs/'+c.pro_name+'/pmd_res/init_data/'
     files = os.listdir(csv_path)
     res_path = c.res_path+'/projs/'+c.pro_name+'/pmd_res/reduced_data/'
@@ -82,7 +82,7 @@ def remove_same_line():
             line_col = headers.index('Line')
             pre = data[1]
             res = [data[1]]
-            if os.path.exists(res_path+i):
+            if (not rewrite) and os.path.exists(res_path+i):
                 print("pmd: "+ res_path+i + " already exists!")
                 continue
             for j in data[2:]:
@@ -174,7 +174,7 @@ def compression_xls(filename):
 
 
 # diff标记：用后一个版本标记前一个版本
-def use_self_remark_pmd_res():
+def use_self_remark_pmd_res(rewrite = False):
     reduced_path = c.res_path + '/projs/' + c.pro_name + '/pmd_res/reduced_data/'
     file_type = os.listdir(reduced_path)[0].split('.')[-1]
     release_path = c.res_path+'/init_data/git_release_version_with_commitid.xls'
@@ -194,7 +194,7 @@ def use_self_remark_pmd_res():
         print("\npmd: now diff use version is : " + release_data[i][0] + '.' + file_type + "; now diff version is : " +
               release_data[i + 1][0] + '.' + file_type)
 
-        if os.path.exists(c.res_path + '/projs/' + c.pro_name + '/pmd_res/diff_data/'+release_data[i+1][0]+'.'+file_type):
+        if (not rewrite) and os.path.exists(c.res_path + '/projs/' + c.pro_name + '/pmd_res/diff_data/'+release_data[i+1][0]+'.'+file_type):
             print("pmd: "+ c.res_path + '/projs/' + c.pro_name + '/pmd_res/diff_data/'+release_data[i+1][0]+'.'+file_type + " already exists!")
             continue
 
@@ -210,7 +210,7 @@ def use_self_remark_pmd_res():
             for j in range(len(old_data)):
                 if new_data[n][file_index].split('src')[-1] == old_data[j][file_index].split('src')[-1] \
                         and new_data[n][code_index].strip() == old_data[j][code_index].strip():
-                    if len(new_data)+1 != len(headers):
+                    if len(new_data[n])+1 != len(headers):
                         new_data[n] = new_data[n]+['','true']
                     else:
                         new_data[n] = new_data[n]+['true']
